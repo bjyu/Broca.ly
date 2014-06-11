@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas>
+    <SubTexture name="charac0" x="1" y="0" width="126" height="136"/>
+    <SubTexture name="charac1" x="124" y="0" width="126" height="126"/>
+    <SubTexture name="charac2" x="247" y="0" width="118" height="126"/>
+    <SubTexture name="charac3" x="356" y="0" width="112" height="126"/>
+    <SubTexture name="charac4" x="460" y="0" width="112" height="126"/>
+</TextureAtlas>	
