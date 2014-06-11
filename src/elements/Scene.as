@@ -21,6 +21,7 @@ package elements
 	public class Scene extends Sprite
 	{
 		private var m_input:TextField;
+		private var m_speechBox:SpeechBox;
 		private var m_characterManager:CharacterManager;
 		private var m_id:String = "0";
 		
@@ -34,6 +35,11 @@ package elements
 			super();
 			m_characterManager = new CharacterManager();
 			m_characterManager.addEventListener("imageLoaded", initInputBox);
+			
+			m_speechBox = new SpeechBox();
+			
+			
+			this.addChild(m_speechBox);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -78,12 +84,14 @@ package elements
 						if (arr.length > 1)
 							m_id = arr[0].toString();
 						
-						var d:Object = {"idx":m_id,"script":m_input.text};
+						var d:Object = {"userId":m_id,"speech":m_input.text};
 						
 						Main.comm.send(JSON.stringify(d));
 						m_input.text = "";
 					}
 				});
+			
+			m_speechBox.y = m_input.y - m_speechBox.height;
 		}
 		
 		private function onConnect():void
@@ -145,7 +153,7 @@ package elements
 		private function actNext(data:Object):void
 		{
 			// 캐릭터 찾기
-			var id:String = data.idx;
+			var id:String = data.userId;
 			var character:Character = m_characterManager.findCharacter(id);
 			if (character == null)
 			{
@@ -154,7 +162,8 @@ package elements
 			}
 			
 			// 액션.
-			character.act(data.script);
+			character.act();
+			m_speechBox.update(id, data.speech);
 		}
 		
 		private function actPrevious(data:Object):void

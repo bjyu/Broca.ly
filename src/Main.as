@@ -8,10 +8,9 @@ package
 //	import flash.ui.MultitouchInputMode;
 	
 	import elements.Scene;
-	
+
 	import network.Comm;
 	
-	// some changes...
 	
 	import starling.core.Starling;
 	

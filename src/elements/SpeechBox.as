@@ -1,0 +1,44 @@
+package elements
+{
+	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.text.TextField;
+	import starling.utils.HAlign;
+	
+	public class SpeechBox extends Sprite
+	{
+		private var m_nameTextField:TextField;
+		private var m_wordsTextField:TextField;
+		
+		public function SpeechBox()
+		{
+			super();
+			
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
+			m_nameTextField = new TextField(100, 30, "");
+			m_nameTextField.border = true;
+			this.addChild(m_nameTextField);
+			
+		}
+		
+		private function onAddedToStage(event:Event):void
+		{
+			m_wordsTextField = new TextField(stage.stageWidth * 0.9, 50, "");
+			m_wordsTextField.fontSize = 20;
+			m_wordsTextField.hAlign = HAlign.LEFT
+			m_wordsTextField.border = true;
+			
+			m_wordsTextField.x = stage.stageWidth * 0.05;
+			m_wordsTextField.y = m_nameTextField.bounds.height;
+			
+			this.addChild(m_wordsTextField);
+		}
+		
+		public function update(name:String,speech:String):void
+		{
+			m_nameTextField.text = name;
+			m_wordsTextField.text = speech;	
+		}
+	}
+}

@@ -7,8 +7,8 @@ package elements
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.text.TextField;
-	import starling.utils.HAlign;
+//	import starling.text.TextField;
+//	import starling.utils.HAlign;
 	
 	import utils.Animator;
 	
@@ -18,8 +18,6 @@ package elements
 //		private var m_characterImages:Object;
 		
 		private var m_image:Image;
-		private var m_words:String;
-		private var m_textField:TextField;
 		
 		/**
 		 * direction (left/right)
@@ -67,37 +65,19 @@ package elements
 		{
 			m_image = new Image(Assets.gameTextureAtlas.getTexture("charac" + m_id));
 			this.addChild(m_image);
-			//			this.y = 300;
-			
-			m_textField = new TextField(300, 25, m_words);
-			m_textField.border = true;
-			m_textField.y = 150;
-			this.addChild(m_textField);
 		}
 		
 		/**
 		 * 대사를 갱신한다.
 		 */
-		public function act(words:String):void
+		public function act():void
 		{
 			this.dispatchEvent(new CharacterEvent(CharacterEvent.ACTING));
 			appear();
-			m_textField.text = words;
 		}
 		
 		private function appear():void
 		{
-			if (position == 0)
-			{
-				m_textField.hAlign = HAlign.LEFT;
-				m_textField.x=10;
-			} 
-			else if (position == 3)
-			{
-				m_textField.hAlign = HAlign.RIGHT;
-				m_textField.x = Main.STAGE_WIDTH - 300 - 10;
-			}
-			
 			Animator.moveTo(m_image, position);
 			Animator.bottopUp(m_image);
 		}
