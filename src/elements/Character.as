@@ -7,15 +7,15 @@ package elements
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-//	import starling.text.TextField;
-//	import starling.utils.HAlign;
+	import starling.textures.Texture;
 	
 	import utils.Animator;
 	
 	public class Character extends Sprite
 	{
 		private var m_id:String;
-//		private var m_characterImages:Object;
+		private var m_characters:Array = new Array("dog", "duck");
+		private var m_textures:Vector.<Texture>;
 		
 		private var m_image:Image;
 		
@@ -61,9 +61,11 @@ package elements
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
+		
 		private function onAddedToStage():void
 		{
-			m_image = new Image(Assets.gameTextureAtlas.getTexture("charac" + m_id));
+			m_textures = Assets.gameTextureAtlas.getTextures(m_characters[int(m_id)]);
+			m_image = new Image(m_textures[0]);
 			this.addChild(m_image);
 		}
 		
@@ -78,8 +80,13 @@ package elements
 		
 		private function appear():void
 		{
-			Animator.moveTo(m_image, position);
-			Animator.bottopUp(m_image);
+			m_image.texture = m_textures[int(Math.random()*3)];
+			
+			this.scaleX = 2;
+			this.scaleY = 2;
+			
+			Animator.moveTo(this, position);
+			Animator.bottopUp(this);
 		}
 		
 	}

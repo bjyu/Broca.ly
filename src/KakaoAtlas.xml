@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas>
+    <SubTexture name="dog0" x="351" y="21" width="126" height="126"/>
+    <SubTexture name="dog1" x="503" y="21" width="126" height="126"/>
+    <SubTexture name="dog2" x="804" y="21" width="126" height="126"/>
+    <SubTexture name="dog3" x="50" y="21" width="126" height="126"/>
+    <SubTexture name="duck0" x="52" y="469" width="126" height="126"/>
+    <SubTexture name="duck1" x="201" y="469" width="126" height="126"/>
+    <SubTexture name="duck2" x="351" y="469" width="126" height="126"/>
+    <SubTexture name="duck3" x="498" y="469" width="126" height="126"/>
+</TextureAtlas>	

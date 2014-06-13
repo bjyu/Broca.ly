@@ -5,8 +5,9 @@
 
 package elements
 {
-	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
+	import flash.events.SoftKeyboardEvent;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
@@ -24,6 +25,7 @@ package elements
 		private var m_speechBox:SpeechBox;
 		private var m_characterManager:CharacterManager;
 		private var m_id:String = "0";
+		public static const KEYBOARD_LOCATION_PADDING:int = 22;
 		
 		/**
 		 * 사용자 정보를 갖는다.
@@ -38,42 +40,34 @@ package elements
 			
 			m_speechBox = new SpeechBox();
 			
-			
 			this.addChild(m_speechBox);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-//			this.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
 		}
-		
-		
 		
 		private function initInputBox():void
 		{
 			// initialize inputbox.
 			m_input = new TextField();
 			m_input.border = true;
+			m_input.multiline = true;
+			m_input.wordWrap = true;
 			m_input.defaultTextFormat = new TextFormat("Helvetica", 22, 0x000000);
-			m_input.width = 580;
-			m_input.height = 25;
-			m_input.x = 20;
+			m_input.width = stage.stageWidth;
+			m_input.height = 50;
+			m_input.x = 0;
 			m_input.y = 350;
 			m_input.type = TextFieldType.INPUT;
 			
-			Starling.current.nativeOverlay.addChild(m_input);
+			// show soft keyboard
+//			m_input.needsSoftKeyboard  = true;
+//			m_input.requestSoftKeyboard();
 			
-			m_input.addEventListener(FocusEvent.FOCUS_IN, 
-				function(event:FocusEvent):void
-				{
-					trace("focused");
-					// show soft keyboard
-					m_input.needsSoftKeyboard  = true;
-					//m_input.requestSoftKeyboard();									   
-					
-				});
+			Starling.current.nativeOverlay.addChild(m_input);
 			
 			m_input.addEventListener(flash.events.KeyboardEvent.KEY_UP , 
 				function(event:flash.events.KeyboardEvent):void 
@@ -91,20 +85,31 @@ package elements
 					}
 				});
 			
+			m_input.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE, onKeyboardActvate);
+			m_input.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE, onKeyboardDeactivate);
+			
 			m_speechBox.y = m_input.y - m_speechBox.height;
+		}
+		
+		protected function onKeyboardDeactivate(event:SoftKeyboardEvent):void
+		{
+			m_input.y = stage.stageHeight - m_input.height;
+		}
+		
+		protected function onKeyboardActvate(event:SoftKeyboardEvent):void
+		{
+			var r:Rectangle = m_input.stage.softKeyboardRect;
+			m_input.y = r.y - m_input.height - KEYBOARD_LOCATION_PADDING;
 		}
 		
 		private function onConnect():void
 		{
-			// TODO Auto Generated method stub
 			trace("connected.");
 //			m_id = "0";
 		}
 		
 		private function onData(event:Event):void
 		{
-//			var script:String = event.data.script;
-			
 			var d:Object = JSON.parse(event.data.toString());
 			actNext(d);
 		}		
@@ -114,21 +119,18 @@ package elements
 			
 		}
 		
+		private var m_testBtn:Sprite;
 		private function onAddedToStage(event:Event):void
 		{
 			trace("Welcome to Broca.ly");
-//			var charac13:Character = new Character();
-//			this.addChild(charac1);
-//			
-//			characters.push(charac1);
 			
 			// ActionButtons
-			var button1:Sprite = ActionButtons.Button("1");
-			button1.x = 0;
-			button1.y = 350;
-			this.addChild(button1);
+			m_testBtn = ActionButtons.Button("1");
+			m_testBtn.x = 0;
+			m_testBtn.y = 350;
+			this.addChild(m_testBtn);
 			
-			button1.addEventListener(TouchEvent.TOUCH, onButtonTouch);
+//			button1.addEventListener(TouchEvent.TOUCH, onButtonTouch);
 		}
 		
 		private function onButtonTouch(event:TouchEvent):void
@@ -139,12 +141,10 @@ package elements
 			{
 				var button:Sprite = ActionButtons.Button("sub" + i.toString());
 				this.addChild(button);
-				//					var gPoint:Point = globalToLocal(new Point(button1.x, button1.y));
 				var t:Number = Math.PI/3 * i - Math.PI/2;
 				var r:int = 60;
 				button.x = sp.x + r * Math.cos(t);
 				button.y = sp.y + r * Math.sin(t);
-				//					
 			}
 			
 			sp.removeEventListeners(TouchEvent.TOUCH);			
@@ -170,7 +170,5 @@ package elements
 		{
 				
 		}
-		
-		
 	}
 }

@@ -15,12 +15,13 @@ package utils
 		
 		public static function bottopUp(sprite:DisplayObject):void 
 		{
-//			var origin:Rectangle = Character(sprite).textureBounds();
 			var origin:Rectangle = sprite.bounds.clone();
 			
 			// initialize
-			sprite.y = sprite.pivotY = origin.height;
+//			sprite.y = sprite.pivotY = origin.height;
+			sprite.y = origin.height;
 			sprite.height = 0;
+			sprite.pivotY = sprite.y/2;
 			
 			// events
 			sprite.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -37,14 +38,12 @@ package utils
 					sprite.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				}
 			}
-			
 		}
 		
 		
 		public static function moveTo(sprite:DisplayObject, position:int = TO_LEFT):void
 		{
 			// intitialzie
-			var origin:Rectangle = sprite.bounds.clone();
 			var targetX:Number;
 			var targetY:Number;
 			var vector:int = 1;
@@ -63,7 +62,7 @@ package utils
 					break;
 				
 				case 3:
-					sprite.x = Main.STAGE_WIDTH
+					sprite.x = Main.STAGE_WIDTH;
 					targetX = Main.STAGE_WIDTH - sprite.width;
 					break;
 			}
@@ -85,8 +84,6 @@ package utils
 					sprite.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				}
 			}
-			
-			
 		}
 		
 	}

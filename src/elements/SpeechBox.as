@@ -24,7 +24,7 @@ package elements
 		
 		private function onAddedToStage(event:Event):void
 		{
-			m_wordsTextField = new TextField(stage.stageWidth * 0.9, 50, "");
+			m_wordsTextField = new TextField(stage.stageWidth * 0.9, 80, "");
 			m_wordsTextField.fontSize = 20;
 			m_wordsTextField.hAlign = HAlign.LEFT
 			m_wordsTextField.border = true;
@@ -35,6 +35,9 @@ package elements
 			this.addChild(m_wordsTextField);
 		}
 		
+		/**
+		 * 대사창을 갱신합니다.
+		 */
 		public function update(name:String,speech:String):void
 		{
 			m_nameTextField.text = name;

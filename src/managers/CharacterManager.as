@@ -111,9 +111,16 @@ package managers
 			m_loader = new Loader();
 			var loaderContext:LoaderContext = new LoaderContext();
 			loaderContext.imageDecodingPolicy = ImageDecodingPolicy.ON_LOAD;
-			var imageSrc:String = "http://cfs6.tistory.com/upload_control/download.blog?fhandle=YmxvZzY0NTE2QGZzNi50aXN0b3J5LmNvbTovYXR0YWNoLzAvMjkuanBn";
+			// var imageSrc:String = "http://cfs6.tistory.com/upload_control/download.blog?fhandle=YmxvZzY0NTE2QGZzNi50aXN0b3J5LmNvbTovYXR0YWNoLzAvMjkuanBn";
+			var imageSrc:String = "http://cfile28.uf.tistory.com/original/2229124451EE947D06D061";
 			m_loader.load(new URLRequest(imageSrc), loaderContext);
 			m_loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, onLoadComplete);
+			
+			// http://blogfiles.naver.net/20140317_293/sisaem9_1395041195241SPYCB_PNG/%B3%AA%C0%CC%BD%BA%C1%F8.png
+			// http://cfile8.uf.tistory.com/original/2532BF4451EE947A013CBB
+			// http://cfile30.uf.tistory.com/original/2513F84451EE94782CFA58
+			
+			// http://cfile28.uf.tistory.com/original/2229124451EE947D06D061
 		}
 		
 		protected function onLoadComplete(event:flash.events.Event):void

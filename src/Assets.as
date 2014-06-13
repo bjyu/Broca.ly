@@ -27,7 +27,8 @@ package
 			{
 				var xml:XML;
 				var loader:URLLoader = new URLLoader();
-				loader.load(new URLRequest("DynamicAtlasTest.xml"));
+//				loader.load(new URLRequest("DynamicAtlasTest.xml"));
+				loader.load(new URLRequest("KakaoAtlas.xml"));
 				
 				loader.addEventListener(flash.events.Event.COMPLETE,
 					function(event:flash.events.Event):void
