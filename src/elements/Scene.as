@@ -39,7 +39,7 @@ package elements
 			m_characterManager.addEventListener("imageLoaded", initInputBox);
 			
 			m_speechBox = new SpeechBox();
-			
+						
 			this.addChild(m_speechBox);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -62,6 +62,7 @@ package elements
 			m_input.x = 0;
 			m_input.y = 350;
 			m_input.type = TextFieldType.INPUT;
+			m_input.needsSoftKeyboard = true;
 			
 			// show soft keyboard
 //			m_input.needsSoftKeyboard  = true;
@@ -100,6 +101,14 @@ package elements
 		{
 			var r:Rectangle = m_input.stage.softKeyboardRect;
 			m_input.y = r.y - m_input.height - KEYBOARD_LOCATION_PADDING;
+			
+			m_input.text = m_input.text;
+		}
+		
+		protected function preventDefault(event:SoftKeyboardEvent):void
+		{
+			event.preventDefault();
+			m_input.stage.focus = null;
 		}
 		
 		private function onConnect():void
@@ -124,13 +133,16 @@ package elements
 		{
 			trace("Welcome to Broca.ly");
 			
+			return;
+			
 			// ActionButtons
 			m_testBtn = ActionButtons.Button("1");
 			m_testBtn.x = 0;
 			m_testBtn.y = 350;
+			
 			this.addChild(m_testBtn);
 			
-//			button1.addEventListener(TouchEvent.TOUCH, onButtonTouch);
+			m_testBtn.addEventListener(TouchEvent.TOUCH, onButtonTouch);
 		}
 		
 		private function onButtonTouch(event:TouchEvent):void
@@ -158,11 +170,13 @@ package elements
 			if (character == null)
 			{
 				character = m_characterManager.newCharacter(id);
+				
 				this.addChild(character);
 			}
 			
 			// 액션.
-			character.act();
+			m_characterManager.act(character);
+//			character.act();
 			m_speechBox.update(id, data.speech);
 		}
 		

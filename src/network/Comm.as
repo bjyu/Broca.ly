@@ -15,7 +15,7 @@ package network
 	public class Comm extends EventDispatcher
 	{
 		private var m_socket:XMLSocket;
-		private var ipAddress:String = "192.168.0.32";
+		private var ipAddress:String = "192.168.0.100";
 		
 		public function Comm()
 		{

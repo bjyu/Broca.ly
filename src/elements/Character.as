@@ -2,18 +2,33 @@ package elements
 {
 	import flash.geom.Rectangle;
 	
-	import events.CharacterEvent;
-	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
 	
-	import utils.Animator;
-	
 	public class Character extends Sprite
 	{
-		private var m_id:String;
+		private var _id:String;
+
+		public function get id():String
+		{
+			return _id;
+		}
+		
+		private var _isAppeared:Boolean = false;
+
+		public function get isAppeared():Boolean
+		{
+			return _isAppeared;
+		}
+
+		public function set isAppeared(value:Boolean):void
+		{
+			_isAppeared = value;
+		}
+
+		
 		private var m_characters:Array = new Array("dog", "duck");
 		private var m_textures:Vector.<Texture>;
 		
@@ -42,7 +57,6 @@ package elements
 			if (_position != value)
 			{
 				_position = value;
-				
 			}
 		}
 
@@ -56,7 +70,7 @@ package elements
 		public function Character(id:String = "")
 		{
 			super();
-			m_id = id;
+			_id = id;
 			
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -64,29 +78,15 @@ package elements
 		
 		private function onAddedToStage():void
 		{
-			m_textures = Assets.gameTextureAtlas.getTextures(m_characters[int(m_id)]);
+			m_textures = Assets.gameTextureAtlas.getTextures(m_characters[int(_id)]);
 			m_image = new Image(m_textures[0]);
 			this.addChild(m_image);
 		}
 		
-		/**
-		 * 대사를 갱신한다.
-		 */
-		public function act():void
-		{
-			this.dispatchEvent(new CharacterEvent(CharacterEvent.ACTING));
-			appear();
-		}
-		
-		private function appear():void
+		// 표정을 바꾼다. (이미지 교체)
+		public function act(faceId:String = ""):void
 		{
 			m_image.texture = m_textures[int(Math.random()*3)];
-			
-			this.scaleX = 2;
-			this.scaleY = 2;
-			
-			Animator.moveTo(this, position);
-			Animator.bottopUp(this);
 		}
 		
 	}

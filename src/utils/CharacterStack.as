@@ -26,7 +26,7 @@ package utils
 			
 			pop(character);
 			m_characterStack.push(character);
-//			reorder();
+			reorder();
 		}
 		
 		private function pop(character:Character):void
@@ -36,6 +36,11 @@ package utils
 			{
 				m_characterStack.splice(idx, 1);
 			}
+		}
+		
+		public function contains(character:Character):Boolean
+		{
+			return !(m_characterStack.indexOf(character, 0) < 0);
 		}
 		
 		/**

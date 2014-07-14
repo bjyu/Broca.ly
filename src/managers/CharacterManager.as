@@ -20,14 +20,18 @@ package managers
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
 	
+	import utils.Animator;
 	import utils.CharacterStack;
 
 	public class CharacterManager extends starling.events.EventDispatcher
 	{
 		private static var _texture:Texture;
 		private var m_loader:Loader;
+		
+		// 캐릭터 배치를 위한 배열이다. 
 		private var m_stack:CharacterStack;
 		
+		// 캐릭터 정보를 갖는다.
 		public var characters:Dictionary;
 		
 		
@@ -49,20 +53,20 @@ package managers
 				characters[id] = new Character(id);
 			
 			var character:Character = characters[id];
-			character.addEventListener(CharacterEvent.ACTING, onActing);
+//			character.addEventListener(CharacterEvent.ACTING, onActing);
 			
 			return characters[id];
 		}
 		
-		private function onActing(event:CharacterEvent):void
-		{
-			var character:Character = event.target as Character;
-			if (character)
-			{
-				// 다시 포지셔닝 한다.
-				direct(character);
-			}
-		}
+//		private function onActing(event:CharacterEvent):void
+//		{
+//			var character:Character = event.target as Character;
+//			if (character)
+//			{
+//				// 다시 포지셔닝 한다.
+//				direct(character);
+//			}
+//		}
 		
 		
 		// 캐릭터 등장 엔진  
@@ -89,6 +93,29 @@ package managers
 			// case 3: 방향을 바꾸는 경우
 			
 			m_stack.push(character);
+			
+		}
+		
+		/**
+		 * 대사를 갱신한다.
+		 */
+		public function act(character:Character):void
+		{
+			m_stack.push(character);
+			
+			character.act("");
+			
+//			character.scaleX = 1;
+//			character.scaleY = 1;
+			
+			
+			if (!character.isAppeared) /* stage hasn't this character*/
+			{
+				Animator.moveTo(character, character.position);
+				Animator.bottopUp(character);
+				
+				character.isAppeared = true;
+			}
 			
 		}
 		
