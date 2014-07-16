@@ -14,8 +14,6 @@ package managers
 	
 	import elements.Character;
 	
-	import events.CharacterEvent;
-	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;

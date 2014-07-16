@@ -5,6 +5,7 @@
 
 package elements
 {
+	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.SoftKeyboardEvent;
 	import flash.geom.Rectangle;
@@ -12,18 +13,33 @@ package elements
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	
+	import feathers.controls.TextInput;
+	import feathers.core.ITextEditor;
+	import feathers.events.FeathersEventType;
+	import feathers.text.StageTextField;
+	
 	import managers.CharacterManager;
 	
 	import starling.core.Starling;
+	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
+	
+	import utils.MyTextFieldTextEditor;
 
 	public class Scene extends Sprite
 	{
+		
 		private var m_input:TextField;
+		private var m_input2:TextInput;
+		private var m_actingInputBox:ActingInputBox;
+		
 		private var m_speechBox:SpeechBox;
 		private var m_characterManager:CharacterManager;
+		
+		private var m_sendButton:starling.display.Button;
+		
 		private var m_id:String = "0";
 		public static const KEYBOARD_LOCATION_PADDING:int = 22;
 		
@@ -35,8 +51,10 @@ package elements
 		public function Scene()
 		{
 			super();
-			m_characterManager = new CharacterManager();
-			m_characterManager.addEventListener("imageLoaded", initInputBox);
+			
+			var bg:Background = new Background();
+			bg.initialize();
+			addChild(bg);
 			
 			m_speechBox = new SpeechBox();
 						
@@ -48,13 +66,67 @@ package elements
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
 		}
+
+		private function initInputBox3():void
+		{
+			var input:StageTextField = new StageTextField();
+		}
+		
+		private function initInputBox2():void
+		{
+			m_input2 = new TextInput();
+			m_input2.width = stage.stageWidth;
+			m_input2.height = 40;
+			
+			m_input2.y = 400;
+			
+//			m_input2.textEditorProperties.fontName = "Helvetica";
+//			m_input2.textEditorProperties.fontSize = 26;
+			
+			m_input2.textEditorFactory = function():ITextEditor
+			{
+				var textEditor:MyTextFieldTextEditor = new MyTextFieldTextEditor();
+//				var textEditor:TextFieldTextEditor = new TextFieldTextEditor();
+				textEditor.textFormat = new TextFormat("Helvetica", 26, 0x0);
+
+				textEditor.multiline = true;
+				return textEditor; 
+			}
+				
+			
+			m_input2.text = "type here...";
+			
+//			var bounds2:Rectangle = Starling.current.nativeStage.softKeyboardInputAreaOfInterest;
+			
+//			Starling.current.nativeStage.
+			m_input2.addEventListener(FeathersEventType.SOFT_KEYBOARD_ACTIVATE,
+				function():void
+				{
+					var bounds:Rectangle = Starling.current.nativeStage.softKeyboardRect;
+					m_input2.y = bounds.y - m_input2.height * 2;
+				}
+			);
+			
+			m_input2.addEventListener(FeathersEventType.SOFT_KEYBOARD_DEACTIVATE,
+				function():void
+				{
+					// To Do Sth.
+					m_input2.focusManager.focus();
+				}
+			);
+			
+			m_speechBox.y = m_input2.y - m_speechBox.height;
+			
+			
+			addChild(m_input2);
+		}
 		
 		private function initInputBox():void
 		{
 			// initialize inputbox.
 			m_input = new TextField();
 			m_input.border = true;
-			m_input.multiline = true;
+//			m_input.multiline = true;
 			m_input.wordWrap = true;
 			m_input.defaultTextFormat = new TextFormat("Helvetica", 22, 0x000000);
 			m_input.width = stage.stageWidth;
@@ -62,7 +134,6 @@ package elements
 			m_input.x = 0;
 			m_input.y = 350;
 			m_input.type = TextFieldType.INPUT;
-			m_input.needsSoftKeyboard = true;
 			
 			// show soft keyboard
 //			m_input.needsSoftKeyboard  = true;
@@ -89,20 +160,71 @@ package elements
 			m_input.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE, onKeyboardActvate);
 			m_input.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE, onKeyboardDeactivate);
 			
+			m_input.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+			
 			m_speechBox.y = m_input.y - m_speechBox.height;
+			
+			// sendButton
+			m_sendButton = new Button(Assets.getTexture("space"));
+			
+			m_sendButton.width = 100;
+			m_sendButton.height = m_input.height;
+			
+			m_sendButton.x = stage.stageWidth - m_sendButton.width;
+			m_sendButton.y = m_input.y;
+			
+//			m_sendButton.label = "Send";
+			
+			m_input.width -= m_sendButton.width;
+			
+			
+			m_sendButton.addEventListener(Event.TRIGGERED, 
+				function(event:Event):void
+				{
+					m_input.removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+					
+					m_input.stage.focus = null;
+					trace("triggered");
+				}
+			);
+			
+			addChild(m_sendButton);
+			
+		}
+		
+		protected function onFocusOut(event:FocusEvent):void
+		{
+			m_input.stage.focus = m_input;
+			trace("focus out");
 		}
 		
 		protected function onKeyboardDeactivate(event:SoftKeyboardEvent):void
 		{
-			m_input.y = stage.stageHeight - m_input.height;
+//			m_input.requestSoftKeyboard();
+			// 위치가 변경되면 invalidate 시켜야 할 수 있다. 이벤트 오작동이 있음.			
+//			m_input.y = stage.stageHeight - m_input.height;
+			trace("onKeyboardDeactivate");
 		}
 		
 		protected function onKeyboardActvate(event:SoftKeyboardEvent):void
 		{
-			var r:Rectangle = m_input.stage.softKeyboardRect;
-			m_input.y = r.y - m_input.height - KEYBOARD_LOCATION_PADDING;
+//			var r:Rectangle = m_input.stage.softKeyboardRect;
+//			m_input.y = r.y - m_input.height *2;// - KEYBOARD_LOCATION_PADDING;
 			
-			m_input.text = m_input.text;
+			if (!m_input.hasEventListener(FocusEvent.FOCUS_OUT))
+				m_input.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+			
+			if (m_actingInputBox == null)
+			{
+				m_actingInputBox = new ActingInputBox();
+				m_actingInputBox.y = m_input.stage.softKeyboardRect.y;
+				m_actingInputBox.width = stage.stageWidth;
+				m_actingInputBox.height = m_input.stage.softKeyboardRect.height;
+				
+				addChild(m_actingInputBox);
+			}
+			
+			trace("onKeyboardActvate");
 		}
 		
 		protected function preventDefault(event:SoftKeyboardEvent):void
@@ -131,6 +253,10 @@ package elements
 		private var m_testBtn:Sprite;
 		private function onAddedToStage(event:Event):void
 		{
+			m_characterManager = new CharacterManager();
+			m_characterManager.addEventListener("imageLoaded", initInputBox);
+//			m_characterManager.addEventListener("imageLoaded", initInputBox2);
+			
 			trace("Welcome to Broca.ly");
 			
 			return;

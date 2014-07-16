@@ -53,6 +53,10 @@ package
 		{
 			if (gameTextures[name] == undefined)
 			{
+				if (name == "space") {
+					return gameTextures[name] = Texture.fromColor(100, 100);
+				}
+				
 				var bitmap:Bitmap = new Assets[name]();
 				gameTextures[name] = Texture.fromBitmap(bitmap);
 			}

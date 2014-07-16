@@ -22,11 +22,4 @@
 		<nature>com.adobe.flexbuilder.project.apollonature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>[source path] src</name>
-			<type>2</type>
-			<location>/Users/B.J/Documents/Adobe Flash Builder 4.7/Projects/PrimaryFeather-Starling-Framework-1a50854/starling/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>
