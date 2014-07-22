@@ -2,10 +2,14 @@
 <TextureAtlas>
     <SubTexture name="dog0" x="351" y="21" width="126" height="126"/>
     <SubTexture name="dog1" x="503" y="21" width="126" height="126"/>
-    <SubTexture name="dog2" x="804" y="21" width="126" height="126"/>
-    <SubTexture name="dog3" x="50" y="21" width="126" height="126"/>
+    <SubTexture name="dog2" x="655" y="21" width="126" height="126"/>
+    <SubTexture name="dog3" x="804" y="21" width="126" height="126"/>
     <SubTexture name="duck0" x="52" y="469" width="126" height="126"/>
     <SubTexture name="duck1" x="201" y="469" width="126" height="126"/>
     <SubTexture name="duck2" x="351" y="469" width="126" height="126"/>
     <SubTexture name="duck3" x="498" y="469" width="126" height="126"/>
+    <SubTexture name="cat0" x="52" y="315" width="126" height="126"/>
+    <SubTexture name="cat1" x="201" y="315" width="126" height="126"/>
+    <SubTexture name="cat2" x="351" y="315" width="126" height="126"/>
+    <SubTexture name="cat3" x="498" y="315" width="126" height="126"/>
 </TextureAtlas>	

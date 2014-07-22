@@ -26,7 +26,7 @@ package
 			var testRunner:FlexUnitTestRunnerUIASMobile=new FlexUnitTestRunnerUIASMobile(stage.fullScreenWidth, stage.fullScreenHeight);
 			testRunner.portNumber=8765; 
 			this.addChild(testRunner); 
-			testRunner.runWithFlexUnit4Runner(currentRunTestSuite(), "Brocal.ly");
+			testRunner.runWithFlexUnit4Runner(currentRunTestSuite(), "Broca.ly");
 		}
 		
 		public function currentRunTestSuite():Array

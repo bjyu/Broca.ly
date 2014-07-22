@@ -13,7 +13,7 @@ package utils
 		public static const TO_BOTTOM:int = 3;
 		
 		
-		public static function bottopUp(sprite:DisplayObject):void 
+		public static function bottomUp(sprite:DisplayObject):void 
 		{
 			var origin:Rectangle = sprite.bounds.clone();
 			

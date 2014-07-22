@@ -110,7 +110,7 @@ package managers
 			if (!character.isAppeared) /* stage hasn't this character*/
 			{
 				Animator.moveTo(character, character.position);
-				Animator.bottopUp(character);
+				Animator.bottomUp(character);
 				
 				character.isAppeared = true;
 			}

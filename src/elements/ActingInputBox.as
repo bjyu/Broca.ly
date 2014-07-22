@@ -12,7 +12,9 @@ package elements
 	import feathers.controls.renderers.IListItemRenderer;
 	import feathers.data.ListCollection;
 	import feathers.layout.TiledRowsLayout;
+	import feathers.themes.MetalWorksMobileTheme;
 	
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -31,10 +33,12 @@ package elements
 		{
 			super();
 			
-//			var img:Image = new Image(Assets.getTexture("space"))
-//			img.width = 800;
-//			img.height = 400;
-//			addChild(img);
+			// background
+			var img:Image = new Image(Assets.getTexture("space"))
+			img.width = 800;
+			img.height = 440;
+			img.color = 0x0;
+			addChild(img);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -51,12 +55,13 @@ package elements
 			// create meta data
 			var collection:ListCollection = new ListCollection();
 			
-			var arr:Vector.<Texture> = Assets.gameTextureAtlas.getTextures();
-			var cnt:uint = arr.length;
+			var arrTexture:Vector.<Texture> = Assets.gameTextureAtlas.getTextures();
+			var arrName:Vertor.<String> = Assets.gameTextureAtlas.getNames();
+			var cnt:uint = arrName.length;
 			
 			for(var i:uint = 0; i < cnt ; i++)
 			{
-				collection.addItem({texture: arr[i]});
+				collection.addItem({texture: arrTexture[i], id:arrName[i] });
 			}
 			
 			const listLayout:TiledRowsLayout = new TiledRowsLayout();
@@ -65,6 +70,7 @@ package elements
 			listLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
 			listLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
 			listLayout.manageVisibility = true;
+			listLayout.gap = 8;
 			
 			this.m_list = new List();
 			this.m_list.dataProvider = collection;
@@ -77,10 +83,15 @@ package elements
 			this.addChild(this.m_list);
 			
 			m_pageIndicator = new PageIndicator();
-			m_pageIndicator.pageCount = 5;
 			
-			m_pageIndicator.horizontalAlign = PageIndicator.HORIZONTAL_ALIGN_CENTER;
-			m_pageIndicator.verticalAlign = PageIndicator.VERTICAL_ALIGN_BOTTOM;
+			this.m_pageIndicator.direction = PageIndicator.DIRECTION_HORIZONTAL;
+			this.m_pageIndicator.pageCount = 1;
+			this.m_pageIndicator.gap = 3;
+			this.m_pageIndicator.paddingTop = this.m_pageIndicator.paddingRight = this.m_pageIndicator.paddingBottom =
+				this.m_pageIndicator.paddingLeft = 6;
+			
+//			m_pageIndicator.horizontalAlign = PageIndicator.HORIZONTAL_ALIGN_CENTER;
+//			m_pageIndicator.verticalAlign = PageIndicator.VERTICAL_ALIGN_BOTTOM;
 			
 			m_pageIndicator.addEventListener(Event.CHANGE, onChange);
 			
@@ -104,8 +115,10 @@ package elements
 			this.m_list.itemRendererProperties.gap = shorterSide * 0.01;
 			
 			this.m_list.width = this.stage.stageWidth;
-			this.m_list.height = this.m_pageIndicator.y;
+			this.m_list.height = 400; //this.m_pageIndicator.y;
 			this.m_list.validate();
+			
+			m_list.addEventListener(Event.TRIGGERED, onTriggered);
 			
 			this.m_pageIndicator.pageCount = this.m_list.horizontalPageCount;
 		}
@@ -113,12 +126,21 @@ package elements
 		protected function tileListItemRendererFactory():IListItemRenderer
 		{
 			const renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
-			renderer.label = "";
 //			renderer.labelField = "label";
 			renderer.iconSourceField = "texture";
-			renderer.iconPosition = Button.ICON_POSITION_BOTTOM;
+			renderer.iconPosition = Button.ICON_POSITION_TOP;
 //			renderer.defaultLabelProperties.textFormat = new BitmapFontTextFormat(_font, NaN, 0x000000);
+			
+			renderer.labelField = "name";
+			renderer.defaultLabelProperties.visible = false;
+			renderer.addEventListener(Event.TRIGGERED, onTriggered);
 			return renderer;
+		}
+		
+		private function onTriggered(event:Event):void
+		{
+			
+			trace(m_list.selectedItem.id);
 		}
 		
 		private function onScroll():void

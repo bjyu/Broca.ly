@@ -65,11 +65,12 @@ package elements
 			
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
+			
 		}
-
-		private function initInputBox3():void
+		
+		private function onResized():void
 		{
-			var input:StageTextField = new StageTextField();
+			trace("stage is resized. - Scene.as");
 		}
 		
 		private function initInputBox2():void
@@ -253,9 +254,12 @@ package elements
 		private var m_testBtn:Sprite;
 		private function onAddedToStage(event:Event):void
 		{
+			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			m_characterManager = new CharacterManager();
 			m_characterManager.addEventListener("imageLoaded", initInputBox);
 //			m_characterManager.addEventListener("imageLoaded", initInputBox2);
+			
+			this.stage.addEventListener(Event.RESIZE, onResized);
 			
 			trace("Welcome to Broca.ly");
 			
@@ -269,6 +273,8 @@ package elements
 			this.addChild(m_testBtn);
 			
 			m_testBtn.addEventListener(TouchEvent.TOUCH, onButtonTouch);
+			
+			
 		}
 		
 		private function onButtonTouch(event:TouchEvent):void

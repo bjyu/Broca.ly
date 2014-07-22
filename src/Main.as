@@ -4,13 +4,11 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageOrientation;
 	import flash.display.StageScaleMode;
-//	import flash.ui.Multitouch;
-//	import flash.ui.MultitouchInputMode;
+	import flash.events.Event;
 	
 	import elements.Scene;
-
-	import network.Comm;
 	
+	import network.Comm;
 	
 	import starling.core.Starling;
 	
@@ -29,6 +27,8 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.setOrientation(StageOrientation.DEFAULT);
+			
+			stage.addEventListener(Event.RESIZE, onResize);
 	
 			// touch or gesture?
 //			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
@@ -47,6 +47,12 @@ package
 			
 			comm = new Comm();
 			
+		}
+		
+		protected function onResize(event:Event):void
+		{
+			// TODO Auto-generated method stub
+			trace("stage is resized.");
 		}
 	}
 }
