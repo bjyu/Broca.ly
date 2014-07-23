@@ -6,7 +6,7 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import elements.Scene;
+	import managers.SceneShifter;
 	
 	import network.Comm;
 	
@@ -41,7 +41,7 @@ package
 			STAGE_WIDTH = stage.fullScreenWidth;
 			
 			// starting starling.
-			myStarling = new Starling(Scene, stage);
+			myStarling = new Starling(SceneShifter, stage);
 //			myStarling.antiAliasing = 1;
 			myStarling.start();
 			

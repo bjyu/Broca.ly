@@ -15,15 +15,21 @@ package elements
 			super();
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			
-			m_nameTextField = new TextField(100, 30, "");
-			m_nameTextField.border = true;
-			this.addChild(m_nameTextField);
-			
 		}
 		
 		private function onAddedToStage(event:Event):void
 		{
+			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
+			initialize();
+		}
+		
+		protected function initialize():void
+		{
+			m_nameTextField = new TextField(100, 30, "");
+			m_nameTextField.border = true;
+			this.addChild(m_nameTextField);
+			
 			m_wordsTextField = new TextField(stage.stageWidth * 0.9, 80, "");
 			m_wordsTextField.fontSize = 20;
 			m_wordsTextField.hAlign = HAlign.LEFT

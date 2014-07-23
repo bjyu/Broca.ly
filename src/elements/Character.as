@@ -1,3 +1,6 @@
+/**
+ * Scene에 표현되는 캐릭터이다.
+ */
 package elements
 {
 	import flash.geom.Rectangle;
