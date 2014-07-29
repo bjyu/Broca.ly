@@ -55,8 +55,8 @@ package elements
 			// create meta data
 			var collection:ListCollection = new ListCollection();
 			
-			var arrTexture:Vector.<Texture> = Assets.gameTextureAtlas.getTextures();
-			var arrName:Vertor.<String> = Assets.gameTextureAtlas.getNames();
+			var arrTexture:Vector.<Texture> = Assets.getAtlas("KakaoAtlas").getTextures();
+			var arrName:Vertor.<String> = Assets.getAtlas("KakaoAtlas").getNames();
 			var cnt:uint = arrName.length;
 			
 			for(var i:uint = 0; i < cnt ; i++)

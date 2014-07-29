@@ -4,6 +4,7 @@
 
 package managers
 {
+	import flash.events.FocusEvent;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 	
@@ -14,12 +15,14 @@ package managers
 	import elements.SpeechBox;
 	
 	import feathers.controls.TextInput;
+	import feathers.controls.text.StageTextTextEditor;
 	import feathers.core.ITextEditor;
 	import feathers.events.FeathersEventType;
 	
 	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.TouchEvent;
 	
 	import utils.MyTextFieldTextEditor;
 	
@@ -27,11 +30,14 @@ package managers
 	{
 		// variables
 		private var m_scene:Scene;
+		private var m_menuLayer:Sprite;
+		
 		private var m_speechBox:SpeechBox;
 		private var m_inputBox:InputBox
 		private var m_actingInputBox:ActingInputBox;
 		
 		private var m_characterManager:CharacterManager;
+		private var m_actionButtonManager:ActionButtonManager;
 		
 		public function SceneShifter()
 		{
@@ -55,6 +61,8 @@ package managers
 			
 			addChild(m_scene);
 			
+			m_menuLayer = new Sprite();
+			addChild(m_menuLayer);
 			
 			// init managers
 			m_characterManager = new CharacterManager();
@@ -62,6 +70,8 @@ package managers
 			//			m_characterManager.addEventListener("imageLoaded", initInputBox2);
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
+			
+			m_actionButtonManager = new ActionButtonManager(m_menuLayer);
 		}
 		
 		// event handlers
@@ -99,6 +109,8 @@ package managers
 				}
 			}
 			);
+			
+			m_actionButtonManager.initialize();
 		}
 		
 		
@@ -124,14 +136,19 @@ package managers
 			if (character == null)
 			{
 				character = m_characterManager.newCharacter(id);
-				
-				this.addChild(character);
+				character.addEventListener(TouchEvent.TOUCH, onCharacterTouch);
+				m_scene.addChild(character);
 			}
 			
 			// 액션.
 			m_characterManager.act(character);
 			
 			m_speechBox.update(id, data.speech);
+		}
+		
+		private function onCharacterTouch(event:TouchEvent):void
+		{
+			m_actionButtonManager.initialize(Character(event.currentTarget));
 		}
 		
 		private function actPrevious(data:Object):void
@@ -155,12 +172,13 @@ package managers
 			{
 				var textEditor:MyTextFieldTextEditor = new MyTextFieldTextEditor();
 				//				var textEditor:TextFieldTextEditor = new TextFieldTextEditor();
+//				var textEditor2:StageTextTextEditor;
+				
 				textEditor.textFormat = new TextFormat("Helvetica", 26, 0x0);
 				
 				textEditor.multiline = true;
 				return textEditor; 
 			}
-			
 			
 			m_input2.text = "type here...";
 			

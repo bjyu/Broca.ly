@@ -1,9 +1,6 @@
 /**
  * 버튼 이미지를 로드한다.
  * 인덱스를 이용해서 필요한 버튼을 가져올 수 있다.
- * 
- * 
- *
 */
 package elements
 {
@@ -26,7 +23,7 @@ package elements
 			if (Buttons[name] == undefined) {
 				var s:flash.display.Sprite = new flash.display.Sprite(); 
 				var g:Graphics = s.graphics;
-				var r:int = 20;
+				var r:int = 50;
 				g.beginFill(Math.random() * 0xffffff);
 				g.drawCircle(r,r,r);
 				g.endFill();

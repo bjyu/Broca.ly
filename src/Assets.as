@@ -14,34 +14,40 @@ package
 
 	public class Assets
 	{
+//		[Embed(source="../media/graphics/bgWelcome.jpg")]
+//		public static const BgWelcome:Class;
+		
 		
 		private static var gameTextures:Dictionary = new Dictionary();
-		public static var gameTextureAtlas:TextureAtlas;
+		private static var gameTextureAtlases:Dictionary = new Dictionary();
+//		public static var gameTextureAtlas:TextureAtlas;
 		public static var dispatcher:EventDispatcher = new EventDispatcher();
 		
 		
-		public static function getAtlas(texture:Texture):void
+		public static function getAtlas(name:String, texture:Texture = null):TextureAtlas
 		{
 			
-			if (gameTextureAtlas == null)
+			if (gameTextureAtlases[name] == undefined && texture)
 			{
 				var xml:XML;
 				var loader:URLLoader = new URLLoader();
 //				loader.load(new URLRequest("DynamicAtlasTest.xml"));
-				loader.load(new URLRequest("KakaoAtlas.xml"));
+				// KakaoAtlas
+				// defaultTheme, button(rect, circle),  
+				loader.load(new URLRequest(name + ".xml"));
 				
 				loader.addEventListener(flash.events.Event.COMPLETE,
 					function(event:flash.events.Event):void
 					{
 						xml = new XML(event.target.data);
-						gameTextureAtlas = new TextureAtlas(texture, xml);
+						gameTextureAtlases[name] = new TextureAtlas(texture, xml);
 						
 						dispatcher.dispatchEvent(new starling.events.Event("loaded"));
 					}
 				);
 			}
 			
-//			return gameTextureAtlas;
+			return gameTextureAtlases[name];
 		}
 		
 		public static function addEventListener(type:String, listener:Function):void

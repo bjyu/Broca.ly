@@ -16,7 +16,9 @@ package
 	public class Main extends Sprite
 	{
 		private var myStarling:Starling;
+		
 		public static var STAGE_WIDTH:Number;
+		public static var STAGE_HEIGHT:Number;
 		public static var comm:Comm;
 		
 		public function Main()
@@ -33,16 +35,17 @@ package
 			// touch or gesture?
 //			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
-			// device boundary
+			// device boundary (dev)
 			graphics.lineStyle(2, 0XFF0000);
 			graphics.drawRect(0, 0, stage.fullScreenWidth, stage.fullScreenHeight);
 			trace("fullScreen: " + stage.fullScreenWidth + ", " +  stage.fullScreenHeight);
 			
 			STAGE_WIDTH = stage.fullScreenWidth;
+			STAGE_HEIGHT = stage.fullScreenHeight;
 			
 			// starting starling.
 			myStarling = new Starling(SceneShifter, stage);
-//			myStarling.antiAliasing = 1;
+			myStarling.antiAliasing = 1;
 			myStarling.start();
 			
 			comm = new Comm();

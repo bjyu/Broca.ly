@@ -14,6 +14,7 @@ package network
 
 	public class Comm extends EventDispatcher
 	{
+		private var m_userId:String = "0";
 		private var m_socket:XMLSocket;
 		private var ipAddress:String = "192.168.0.100";
 		
@@ -35,7 +36,13 @@ package network
 		{
 			try 
 			{
-				m_socket.send(data);
+				// To Do # this code must be removed.
+				if (data.hasOwnProperty("userId"))
+					m_userId = data.userId;
+				else
+					data["userId"] = m_userId;
+				
+				m_socket.send(JSON.stringify(data));
 			} 
 			catch(e:Error) 
 			{

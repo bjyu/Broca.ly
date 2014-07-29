@@ -14,6 +14,11 @@ package managers
 	
 	import elements.Character;
 	
+	import starling.animation.IAnimatable;
+	import starling.animation.Juggler;
+	import starling.animation.Transitions;
+	import starling.animation.Tween;
+	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
@@ -109,10 +114,39 @@ package managers
 			
 			if (!character.isAppeared) /* stage hasn't this character*/
 			{
-				Animator.moveTo(character, character.position);
-				Animator.bottomUp(character);
+				var tween:Tween = new Tween(character, 1.0, Transitions.EASE_IN);
+				character.y = character.textureBounds.height;
+				character.pivotY = character.height;
+				character.height = 0;
 				
-				character.isAppeared = true;
+				switch (character.position)
+				{
+					case 0:
+						character.x = -character.width;
+						tween.moveTo(0, character.y);
+						
+						break;
+					
+					case 3:
+						
+						character.x = Main.STAGE_WIDTH;
+						tween.moveTo(Main.STAGE_WIDTH - character.width, character.y);
+						break;
+				}
+
+				tween.animate("height", character.textureBounds.height);
+				tween.onComplete = function():void
+					{
+						Starling.juggler.remove(tween);
+						tween = null;
+					};
+				Starling.juggler.add(tween);
+				
+					
+//				Animator.moveTo(character, character.position);
+//				Animator.bottomUp(character);
+
+//				character.isAppeared = true;
 			}
 			
 		}
@@ -152,7 +186,7 @@ package managers
 		{
 			_texture = Texture.fromBitmap(Bitmap(LoaderInfo(event.target).content));
 //			Assets.addEventListener("loaded", appear);
-			Assets.getAtlas(_texture);
+			Assets.getAtlas("KakaoAtlas", _texture);
 			
 			m_loader.contentLoaderInfo.removeEventListener(flash.events.Event.COMPLETE, onLoadComplete);
 			m_loader = null;
