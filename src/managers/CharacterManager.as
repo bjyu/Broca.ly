@@ -186,7 +186,7 @@ package managers
 		{
 			_texture = Texture.fromBitmap(Bitmap(LoaderInfo(event.target).content));
 //			Assets.addEventListener("loaded", appear);
-			Assets.getAtlas("KakaoAtlas", _texture);
+			Assets.getAtlas(Assets.DefaultAtlasName, _texture);
 			
 			m_loader.contentLoaderInfo.removeEventListener(flash.events.Event.COMPLETE, onLoadComplete);
 			m_loader = null;

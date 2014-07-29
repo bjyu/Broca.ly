@@ -25,14 +25,33 @@ package elements
 		 */
 		private var m_input:TextField;
 		
-		// autoCorrect 문제로 인한 대체 컴포넌트
+		// autoCorrect 문제로 인한 대체 컴포넌트 (not resolved.)
 		private var m_input2:StageTextField;
 		
 		
 		private var m_faceButton:starling.display.Button;
 		private var m_sendButton:feathers.controls.Button;
 		
-		public static const INPUTBOX_POS_Y:Number = 600;		
+		private var _faceId:String;
+
+		/**
+		 * faceBox에서 선택된 아이디.
+		 */
+		public function get faceId():String
+		{
+			return _faceId;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set faceId(value:String):void
+		{
+			_faceId = value;
+		}
+
+		// Device별 정리 필요.
+		public static var INPUTBOX_POS_Y:Number = 600;		
 		
 		public function get softKeyboardRect():Rectangle
 		{

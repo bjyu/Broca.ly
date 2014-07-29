@@ -17,6 +17,7 @@ package
 //		[Embed(source="../media/graphics/bgWelcome.jpg")]
 //		public static const BgWelcome:Class;
 		
+		public static const DefaultAtlasName:String = "KakaoAtlas"; 
 		
 		private static var gameTextures:Dictionary = new Dictionary();
 		private static var gameTextureAtlases:Dictionary = new Dictionary();
@@ -32,7 +33,7 @@ package
 				var xml:XML;
 				var loader:URLLoader = new URLLoader();
 //				loader.load(new URLRequest("DynamicAtlasTest.xml"));
-				// KakaoAtlas
+				
 				// defaultTheme, button(rect, circle),  
 				loader.load(new URLRequest(name + ".xml"));
 				

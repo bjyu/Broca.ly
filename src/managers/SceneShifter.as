@@ -8,11 +8,14 @@ package managers
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 	
-	import elements.ActingInputBox;
 	import elements.Character;
+	import elements.FaceBox;
 	import elements.InputBox;
 	import elements.Scene;
 	import elements.SpeechBox;
+	
+	import events.CharacterEvent;
+	import events.SelectEvent;
 	
 	import feathers.controls.TextInput;
 	import feathers.controls.text.StageTextTextEditor;
@@ -29,15 +32,23 @@ package managers
 	public class SceneShifter extends Sprite
 	{
 		// variables
-		private var m_scene:Scene;
+		
+		// main layer
+		private var m_scene:Scene; 
+		
+		// action menu layer
 		private var m_menuLayer:Sprite;
+		
+		// preview layer
+		private var m_previewLayer:Sprite;
 		
 		private var m_speechBox:SpeechBox;
 		private var m_inputBox:InputBox
-		private var m_actingInputBox:ActingInputBox;
+		private var m_faceBox:FaceBox;
 		
 		private var m_characterManager:CharacterManager;
 		private var m_actionButtonManager:ActionButtonManager;
+		private var m_previewManager:PreviewManager;
 		
 		public function SceneShifter()
 		{
@@ -64,6 +75,9 @@ package managers
 			m_menuLayer = new Sprite();
 			addChild(m_menuLayer);
 			
+			m_previewLayer = new Sprite();
+			addChild(m_previewLayer);
+			
 			// init managers
 			m_characterManager = new CharacterManager();
 			//			m_characterManager.addEventListener("imageLoaded", initInputBox);
@@ -72,6 +86,15 @@ package managers
 			Main.comm.addEventListener("data", onData);
 			
 			m_actionButtonManager = new ActionButtonManager(m_menuLayer);
+			m_actionButtonManager.addEventListener(SelectEvent.SELECTED, 
+				function(event:SelectEvent):void
+				{
+					// To Do # define effect resources.
+//					m_previewManager.preview.showEffect(event.data.toString());
+				}
+			);
+			
+			m_previewManager = new PreviewManager(m_previewLayer);
 		}
 		
 		// event handlers
@@ -96,20 +119,29 @@ package managers
 			addChild(m_inputBox);
 			
 			m_inputBox.addEventListener("keyboardActivated", function(event:Event):void
-			{
-				// 4. actionBox
-				if (m_actingInputBox == null)
 				{
-					m_actingInputBox = new ActingInputBox();
-					m_actingInputBox.y = m_inputBox.softKeyboardRect.y;
-					m_actingInputBox.width = stage.stageWidth;
-					m_actingInputBox.height = m_inputBox.softKeyboardRect.height;
-					
-					addChild(m_actingInputBox);
+					// 4. faceBox
+					if (m_faceBox == null)
+					{
+						m_faceBox = new FaceBox();
+						m_faceBox.y = m_inputBox.softKeyboardRect.y;
+						m_faceBox.width = stage.stageWidth;
+						m_faceBox.height = m_inputBox.softKeyboardRect.height;
+						m_faceBox.addEventListener(SelectEvent.SELECTED, 
+							function(event:SelectEvent):void
+							{
+								m_inputBox.faceId = event.data.toString();
+								
+								// preview
+								m_previewManager.preview.showCharacter(m_inputBox.faceId);
+							}
+						);
+						addChild(m_faceBox);
+					}
 				}
-			}
 			);
 			
+			// To Do # remove this line (test code)
 			m_actionButtonManager.initialize();
 		}
 		

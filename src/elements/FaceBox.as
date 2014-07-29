@@ -1,9 +1,11 @@
 /**
- * 캐릭터 액션을 지정할 수 있는 박스이다.
+ * 캐릭터 표정을 지정할 수 있는 박스이다.
  * Feathers examples의 TileList를 참고하였다.
  */
 package elements
 {
+	import events.SelectEvent;
+	
 	import feathers.controls.Button;
 	import feathers.controls.List;
 	import feathers.controls.PageIndicator;
@@ -19,7 +21,7 @@ package elements
 	import starling.events.Event;
 	import starling.textures.Texture;
 	
-	public class ActingInputBox extends Sprite
+	public class FaceBox extends Sprite
 	{
 		
 		private var m_faceTab:Sprite;
@@ -29,7 +31,7 @@ package elements
 		private var m_navigator:ScreenNavigator;
 		private var m_list:List;
 		
-		public function ActingInputBox()
+		public function FaceBox()
 		{
 			super();
 			
@@ -55,8 +57,8 @@ package elements
 			// create meta data
 			var collection:ListCollection = new ListCollection();
 			
-			var arrTexture:Vector.<Texture> = Assets.getAtlas("KakaoAtlas").getTextures();
-			var arrName:Vertor.<String> = Assets.getAtlas("KakaoAtlas").getNames();
+			var arrTexture:Vector.<Texture> = Assets.getAtlas(Assets.DefaultAtlasName).getTextures();
+			var arrName:Vertor.<String> = Assets.getAtlas(Assets.DefaultAtlasName).getNames();
 			var cnt:uint = arrName.length;
 			
 			for(var i:uint = 0; i < cnt ; i++)
@@ -139,8 +141,9 @@ package elements
 		
 		private function onTriggered(event:Event):void
 		{
-			
 			trace(m_list.selectedItem.id);
+			// InputBox로 전달해야 한다.
+			this.dispatchEvent(new SelectEvent(m_list.selectedItem.id));
 		}
 		
 		private function onScroll():void

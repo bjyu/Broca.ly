@@ -81,7 +81,7 @@ package elements
 		
 		private function onAddedToStage():void
 		{
-			m_textures = Assets.getAtlas("KakaoAtlas").getTextures(m_characters[int(_id)]);
+			m_textures = Assets.getAtlas(Assets.DefaultAtlasName).getTextures(m_characters[int(_id)]);
 			m_image = new Image(m_textures[0]);
 			this.addChild(m_image);
 		}

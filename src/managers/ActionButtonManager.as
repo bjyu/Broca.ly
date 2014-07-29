@@ -7,6 +7,8 @@ package managers
 	import elements.ActionButtons;
 	import elements.Character;
 	
+	import events.SelectEvent;
+	
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -94,12 +96,14 @@ package managers
 		
 		private function createButton():void
 		{
-			var button:Sprite = ActionButtons.Button("sub" + m_menuLayer.numChildren.toString());
+			var buttonId:String = "sub" + m_menuLayer.numChildren.toString();
+			var button:Sprite = ActionButtons.Button(buttonId);
 			button.addEventListener(TouchEvent.TOUCH, 
 				function():void
 				{
 //					m_menuLayer.visible = false;
 					initialize();
+					this.dispatchEvent(new SelectEvent(buttonId));
 				}
 			);
 			
