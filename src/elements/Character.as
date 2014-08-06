@@ -30,6 +30,18 @@ package elements
 		{
 			_isAppeared = value;
 		}
+		
+		private var _faceId:String;
+
+		public function get faceId():String
+		{
+			return _faceId;
+		}
+
+		public function set faceId(value:String):void
+		{
+			_faceId = value;
+		}
 
 		
 		private var m_characters:Array = new Array("dog", "duck");
@@ -87,9 +99,12 @@ package elements
 		}
 		
 		// 표정을 바꾼다. (이미지 교체)
-		public function act(faceId:String = ""):void
+		public function act():void
 		{
-			m_image.texture = m_textures[int(Math.random()*3)];
+			if (faceId)
+				m_image.texture = Assets.getAtlas(Assets.DefaultAtlasName).getTexture(faceId); //m_textures[int(Math.random()*3)];
+			else 
+				m_image.texture = m_textures[0];
 		}
 		
 	}

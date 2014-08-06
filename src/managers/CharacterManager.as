@@ -106,7 +106,7 @@ package managers
 		{
 			m_stack.push(character);
 			
-			character.act("");
+			character.act();
 			
 //			character.scaleX = 1;
 //			character.scaleY = 1;

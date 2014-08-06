@@ -21,6 +21,7 @@ package managers
 	import feathers.controls.text.StageTextTextEditor;
 	import feathers.core.ITextEditor;
 	import feathers.events.FeathersEventType;
+	import feathers.themes.MetalWorksMobileTheme;
 	
 	import starling.core.Starling;
 	import starling.display.Sprite;
@@ -54,7 +55,16 @@ package managers
 		{
 			super();
 			
-			initialize();
+			loadResources();
+		}
+		
+		private function loadResources():void
+		{
+			// loading image resources...
+//			new MetalWorksMobileTheme();
+			
+			Assets.getAtlas("ActionButtonAtlas", Assets.getTexture("ActionButtons"));
+			Assets.addEventListener("ActionButtonAtlasLoaded", initialize);
 		}
 		
 		/**
@@ -62,21 +72,19 @@ package managers
 		 */
 		protected function initialize():void
 		{
-			// loading image resources...
-			
-			
 			// building components
-			// 1. scene
+			//  scene
 			m_scene = new Scene();
 			m_scene.addEventListener(Event.ADDED_TO_STAGE, onSceneAddedToStage);
 			
 			addChild(m_scene);
 			
-			m_menuLayer = new Sprite();
-			addChild(m_menuLayer);
 			
 			m_previewLayer = new Sprite();
 			addChild(m_previewLayer);
+			
+			m_menuLayer = new Sprite();
+			addChild(m_menuLayer);
 			
 			// init managers
 			m_characterManager = new CharacterManager();
@@ -89,12 +97,19 @@ package managers
 			m_actionButtonManager.addEventListener(SelectEvent.SELECTED, 
 				function(event:SelectEvent):void
 				{
+					// 1. inputBox에 아이디 전달.
+					// 2. subCatId가 있으면 버튼 재구성.
+					
 					// To Do # define effect resources.
 //					m_previewManager.preview.showEffect(event.data.toString());
 				}
 			);
 			
 			m_previewManager = new PreviewManager(m_previewLayer);
+			
+		
+			// To Do # remove this line (test code)
+			m_actionButtonManager.initialize("main");
 		}
 		
 		// event handlers
@@ -140,9 +155,6 @@ package managers
 					}
 				}
 			);
-			
-			// To Do # remove this line (test code)
-			m_actionButtonManager.initialize();
 		}
 		
 		
@@ -172,6 +184,8 @@ package managers
 				m_scene.addChild(character);
 			}
 			
+			character.faceId = data.faceId;
+			
 			// 액션.
 			m_characterManager.act(character);
 			
@@ -180,7 +194,7 @@ package managers
 		
 		private function onCharacterTouch(event:TouchEvent):void
 		{
-			m_actionButtonManager.initialize(Character(event.currentTarget));
+//			m_actionButtonManager.initialize(Character(event.currentTarget).name);
 		}
 		
 		private function actPrevious(data:Object):void

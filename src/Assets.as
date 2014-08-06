@@ -14,8 +14,8 @@ package
 
 	public class Assets
 	{
-//		[Embed(source="../media/graphics/bgWelcome.jpg")]
-//		public static const BgWelcome:Class;
+		[Embed(source="../media/circle number template.png")]
+		public static const ActionButtons:Class;
 		
 		public static const DefaultAtlasName:String = "KakaoAtlas"; 
 		
@@ -43,7 +43,7 @@ package
 						xml = new XML(event.target.data);
 						gameTextureAtlases[name] = new TextureAtlas(texture, xml);
 						
-						dispatcher.dispatchEvent(new starling.events.Event("loaded"));
+						dispatcher.dispatchEvent(new starling.events.Event(name + "Loaded"));
 					}
 				);
 			}

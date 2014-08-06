@@ -1,14 +1,15 @@
 package
 {
-	import Array;
-	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageAspectRatio;
 	import flash.display.StageScaleMode;
 	
+	import Array;
+	
 	import flexunit.flexui.FlexUnitTestRunnerUIASMobile;
 	
+	import tests.ButtonModel_Parse_Test;
 	import tests.DataSchemeTest;
 	
 	public class FlexUnitApplication extends Sprite
@@ -32,7 +33,8 @@ package
 		public function currentRunTestSuite():Array
 		{
 			var testsToRun:Array = new Array();
-			testsToRun.push(tests.DataSchemeTest);
+//			testsToRun.push(tests.DataSchemeTest);
+			testsToRun.push(tests.ButtonModel_Parse_Test);
 			return testsToRun;
 		}
 	}

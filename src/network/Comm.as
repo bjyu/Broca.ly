@@ -16,17 +16,19 @@ package network
 	{
 		private var m_userId:String = "0";
 		private var m_socket:XMLSocket;
-		private var ipAddress:String = "192.168.0.100";
+		private var ipAddress:String;
+		private var m_port:uint = 8888;
 		
 		public function Comm()
 		{
+			ipAddress = "192.168.0.88";
+			
 			initialize();
-//			ipAddress = "192.168.1.10";
 		}
 		
 		private function initialize():void
 		{
-			m_socket = new XMLSocket(ipAddress, 8888);
+			m_socket = new XMLSocket(ipAddress, m_port);
 			
 			m_socket.addEventListener(flash.events.Event.CONNECT, onConnect);                   
 			m_socket.addEventListener(IOErrorEvent.IO_ERROR, onError);
@@ -48,7 +50,7 @@ package network
 			{
 				trace(e.message);
 				// reconnect.
-				m_socket.connect(ipAddress, 8888);
+				m_socket.connect(ipAddress, m_port);
 			}
 			
 		}
@@ -56,7 +58,6 @@ package network
 		protected function onError(event:IOErrorEvent):void
 		{
 			trace(event.toString());
-			
 		}
 		
 		protected function onConnect(event:flash.events.Event):void

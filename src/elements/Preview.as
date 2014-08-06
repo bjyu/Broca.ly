@@ -9,6 +9,7 @@ package elements
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	
 	public class Preview extends Sprite
 	{
@@ -22,18 +23,26 @@ package elements
 			super();
 			
 			// background Image
-			var image:Image = new Image(Assets.getTexture("space"));
-			image.color = 0x5c5c5c;
-			image.alpha = 0.5;
-			image.width = Main.STAGE_WIDTH * 0.6;
-			image.height = Main.STAGE_HEIGHT * 0.5 * 0.75;
-			addChild(image);
+//			var image:Image = new Image(Assets.getTexture("space"));
+//			image.color = 0x5c5c5c;
+//			image.alpha = 0.5;
+//			image.width = Main.STAGE_WIDTH * 0.6;
+//			image.height = Main.STAGE_HEIGHT * 0.5 * 0.75;
+//			addChild(image);
 			
 			m_closeButton = new Button();
 			m_closeButton.label = "Close";
-			m_closeButton.x = image.bounds.right - m_closeButton.width;
+			m_closeButton.addEventListener(Event.TRIGGERED, onCloseButtonTriggered);
+			
+			
 			this.addChild(m_closeButton);
 			
+			this.visible = false;
+		}
+		
+		private function onCloseButtonTriggered():void
+		{
+			this.visible = false;
 		}
 		
 		public function showCharacter(faceId:String):void
@@ -45,21 +54,25 @@ package elements
 			if (!m_character)
 			{
 				m_character = new Sprite();
-				m_effect.addChild(m_character);
+				m_character.addChild(character);
+				addChild(m_character);
 				
 				putCenter(m_character);
-				addChild(m_character);
 			}
 			else
 			{
 				m_character.removeChildren(0,-1,true);
 				m_character.addChild(character);
 			}
+			
+			this.visible = true;
 		}
 		
 		// separate character positioning and new effect sprite
 		public function showEffect(effectKey:String):void
 		{
+			this.visible = true;
+			
 			var effectType:String = getEffectType(effectKey);
 			
 			switch(effectType)
@@ -87,6 +100,9 @@ package elements
 					// animation
 					
 					break;
+				
+				default:
+					break;
 			}
 			
 		}
@@ -95,18 +111,19 @@ package elements
 		public static function getEffectType(effectKey:String):String
 		{
 			// To Do #
-			// TODO Auto Generated method stub
 			return "";
 		}
 		
 		private function putCenter(displayObject:DisplayObject):void
 		{
-			var scale:Number = Math.min(this.width * 0.9 / displayObject.width, this.height * 0.9 / displayObject.height);
+			var scale:Number = Math.min(Main.STAGE_WIDTH * 0.9 / displayObject.width, Main.STAGE_HEIGHT * 0.5 * 0.75 / displayObject.height);
 			displayObject.scaleX = displayObject.scaleY = scale;
 			
 			// add to center
-			displayObject.x = (this.width - displayObject.width) / 2;
-			displayObject.y = (this.height - displayObject.height) / 2;
+			this.x = (Main.STAGE_WIDTH - displayObject.width) / 2;
+			this.y = (this.height - displayObject.height) / 2;
+			
+			m_closeButton.x = this.bounds.right - m_closeButton.width;
 		}
 		
 	}

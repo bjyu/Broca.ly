@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas>
+    <SubTexture name="btn1" x="14" y="14" width="140" height="140"/>
+    <SubTexture name="btn2" x="154" y="14" width="140" height="140"/>
+    <SubTexture name="btn3" x="294" y="14" width="140" height="140"/>
+    <SubTexture name="btn4" x="434" y="14" width="140" height="140"/>
+    <SubTexture name="btn5" x="574" y="14" width="140" height="140"/>
+    <SubTexture name="btn6" x="14" y="154" width="140" height="140"/>
+    <SubTexture name="btn7" x="154" y="154" width="140" height="140"/>
+    <SubTexture name="btn8" x="294" y="154" width="140" height="140"/>
+    <SubTexture name="btn9" x="434" y="154" width="140" height="140"/>
+    <SubTexture name="btn10" x="574" y="154" width="140" height="140"/>
+</TextureAtlas>	

@@ -39,7 +39,7 @@ package elements
 			var img:Image = new Image(Assets.getTexture("space"))
 			img.width = 800;
 			img.height = 440;
-			img.color = 0x0;
+//			img.color = 0x0;
 			addChild(img);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);

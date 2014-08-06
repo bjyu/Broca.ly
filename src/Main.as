@@ -6,6 +6,8 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
+	import feathers.core.FocusManager;
+	
 	import managers.SceneShifter;
 	
 	import network.Comm;
@@ -47,6 +49,8 @@ package
 			myStarling = new Starling(SceneShifter, stage);
 			myStarling.antiAliasing = 1;
 			myStarling.start();
+			
+//			FocusManager.isEnabled = true;
 			
 			comm = new Comm();
 			
