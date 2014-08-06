@@ -4,31 +4,17 @@
 
 package managers
 {
-	import flash.events.FocusEvent;
-	import flash.geom.Rectangle;
-	import flash.text.TextFormat;
-	
 	import elements.Character;
 	import elements.FaceBox;
 	import elements.InputBox;
 	import elements.Scene;
 	import elements.SpeechBox;
 	
-	import events.CharacterEvent;
 	import events.SelectEvent;
 	
-	import feathers.controls.TextInput;
-	import feathers.controls.text.StageTextTextEditor;
-	import feathers.core.ITextEditor;
-	import feathers.events.FeathersEventType;
-	import feathers.themes.MetalWorksMobileTheme;
-	
-	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
-	
-	import utils.MyTextFieldTextEditor;
 	
 	public class SceneShifter extends Sprite
 	{
@@ -202,55 +188,5 @@ package managers
 			
 		}
 		
-		private var m_input2:TextInput;
-		private function initInputBox2():void
-		{
-			m_input2 = new TextInput();
-			m_input2.width = stage.stageWidth;
-			m_input2.height = 40;
-			
-			m_input2.y = 400;
-			
-			//			m_input2.textEditorProperties.fontName = "Helvetica";
-			//			m_input2.textEditorProperties.fontSize = 26;
-			
-			m_input2.textEditorFactory = function():ITextEditor
-			{
-				var textEditor:MyTextFieldTextEditor = new MyTextFieldTextEditor();
-				//				var textEditor:TextFieldTextEditor = new TextFieldTextEditor();
-//				var textEditor2:StageTextTextEditor;
-				
-				textEditor.textFormat = new TextFormat("Helvetica", 26, 0x0);
-				
-				textEditor.multiline = true;
-				return textEditor; 
-			}
-			
-			m_input2.text = "type here...";
-			
-			//			var bounds2:Rectangle = Starling.current.nativeStage.softKeyboardInputAreaOfInterest;
-			
-			//			Starling.current.nativeStage.
-			m_input2.addEventListener(FeathersEventType.SOFT_KEYBOARD_ACTIVATE,
-				function():void
-				{
-					var bounds:Rectangle = Starling.current.nativeStage.softKeyboardRect;
-					m_input2.y = bounds.y - m_input2.height * 2;
-				}
-			);
-			
-			m_input2.addEventListener(FeathersEventType.SOFT_KEYBOARD_DEACTIVATE,
-				function():void
-				{
-					// To Do Sth.
-					m_input2.focusManager.focus();
-				}
-			);
-			
-			//			m_speechBox.y = m_input2.y - m_speechBox.height;
-			
-			
-			addChild(m_input2);
-		}
 	}
 }
