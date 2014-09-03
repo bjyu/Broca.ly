@@ -17,6 +17,13 @@ package
 		[Embed(source="../media/circle number template.png")]
 		public static const ActionButtons:Class;
 		
+		[Embed(source="../media/LayoutAtlas.png")]
+		public static const LayoutAtlas:Class;
+		
+		
+		[Embed(source="../media/CharactersAtlas.png")]
+		public static const CharactersAtlas:Class;
+		
 		public static const DefaultAtlasName:String = "KakaoAtlas"; 
 		
 		private static var gameTextures:Dictionary = new Dictionary();
@@ -25,7 +32,7 @@ package
 		public static var dispatcher:EventDispatcher = new EventDispatcher();
 		
 		
-		public static function getAtlas(name:String, texture:Texture = null):TextureAtlas
+		public static function getAtlas(name:String, texture:Texture = null, onComplete:Function = null):TextureAtlas
 		{
 			
 			if (gameTextureAtlases[name] == undefined && texture)
@@ -44,6 +51,8 @@ package
 						gameTextureAtlases[name] = new TextureAtlas(texture, xml);
 						
 						dispatcher.dispatchEvent(new starling.events.Event(name + "Loaded"));
+						
+						if (onComplete != null) onComplete();
 					}
 				);
 			}

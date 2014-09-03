@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas>
+    <SubTexture name="speechBox" x="3" y="3" width="800" height="146"/>
+    <SubTexture name="inputBox" x="3" y="160" width="658" height="52"/>
+    <SubTexture name="faceButton" x="664" y="160" width="54" height="54"/>
+    <SubTexture name="sendButton" x="720" y="160" width="96" height="52"/>
+</TextureAtlas>	

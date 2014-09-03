@@ -1,9 +1,6 @@
 package elements
 {
 	import starling.display.Button;
-	import starling.display.Sprite;
-	import starling.events.Event;
-	import starling.textures.TextureAtlas;
 	
 	public class ActionButton extends Button
 	{

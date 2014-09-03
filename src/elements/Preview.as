@@ -31,7 +31,7 @@ package elements
 //			addChild(image);
 			
 			m_closeButton = new Button();
-			m_closeButton.label = "Close";
+			m_closeButton.label = "X";
 			m_closeButton.addEventListener(Event.TRIGGERED, onCloseButtonTriggered);
 			
 			

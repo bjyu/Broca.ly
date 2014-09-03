@@ -1,7 +1,12 @@
 package utils
 {
+	import flash.geom.Point;
+	
 	import elements.Character;
 
+	/**
+	 * @deprecated
+	 * */
 	public class CharacterStack
 	{
 		private var m_characterStack:Vector.<Character>;
@@ -10,7 +15,13 @@ package utils
 		public function CharacterStack()
 		{
 			m_characterStack = new Vector.<Character>();
-			m_priority = new Array(0,3,1,2); // 0 , 1 , 2 , 3 의 포지션에서 좌,우,좌,우로 순차적 등장.
+//			m_priority = new Array(0,3,1,2); // 0 , 1 , 2 , 3 의 포지션에서 좌,우,좌,우로 순차적 등장.
+			m_priority = new Array();
+			
+			m_priority.push(new Point(0,300));
+			m_priority.push(new Point(500,300));
+			m_priority.push(new Point());
+			m_priority.push(new Point());
 		}
 		
 		/**
@@ -20,8 +31,11 @@ package utils
 		{
 			// 새로 들어온 경우.
 			var idx:int = m_characterStack.indexOf(character);
-			if (idx < 0)
-				character.position = m_priority[m_characterStack.length];
+			if (idx < 0) 
+			{
+				/*** To Do # 타입을 Point로 변경함. 이에 맞게 수정할 것. ***/
+//				character.position = m_priority[m_characterStack.length];
+			}
 				
 			
 			pop(character);

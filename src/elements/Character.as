@@ -3,6 +3,7 @@
  */
 package elements
 {
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import starling.display.Image;
@@ -12,12 +13,37 @@ package elements
 	
 	public class Character extends Sprite
 	{
-		private var _id:String;
+		private var _characterID:String;
 
-		public function get id():String
+		public function set characterID(value:String):void
 		{
-			return _id;
+			_characterID = value;
 		}
+
+
+		public function get characterID():String
+		{
+			return _characterID;
+		}
+
+		private var _matrixPos:Point = new Point();
+
+		/**
+		 * 2D position for isometric
+		 */
+		public function get matrixPos():Point
+		{
+			return _matrixPos;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set matrixPos(value:Point):void
+		{
+			_matrixPos = value;
+		}
+
 		
 		private var _isAppeared:Boolean = false;
 
@@ -31,47 +57,48 @@ package elements
 			_isAppeared = value;
 		}
 		
-		private var _faceId:String;
+		private var _faceID:String;
 
 		public function get faceId():String
 		{
-			return _faceId;
+			return _faceID;
 		}
 
 		public function set faceId(value:String):void
 		{
-			_faceId = value;
+			if (value != _faceID)	
+			{
+				_faceID = value;
+//				act();
+			}
 		}
 
 		
-		private var m_characters:Array = new Array("dog", "duck");
+//		private var m_characters:Array = new Array("dog", "duck");
 		private var m_textures:Vector.<Texture>;
 		
 		private var m_image:Image;
 		
+		private var _direction:String = "right";
+
 		/**
 		 * direction (left/right)
 		 */
-		public var direction:String = "left";
-		
-		private var _position:int = 0;
-
-		/**
-		 * 캐릭터의 위치 (위치별 아이디를 가질 수 있다. 네 자리중 왼쪽부터 0~3값을 갖는다.)
-		 */
-		public function get position():int
+		public function get direction():String
 		{
-			return _position;
+			return _direction;
 		}
 
 		/**
 		 * @private
 		 */
-		public function set position(value:int):void
+		public function set direction(value:String):void
 		{
-			if (_position != value)
+			if (value != _direction)
 			{
-				_position = value;
+				_direction = value;
+				if (m_image)
+					this.m_image.scaleX *= -1;
 			}
 		}
 
@@ -85,7 +112,7 @@ package elements
 		public function Character(id:String = "")
 		{
 			super();
-			_id = id;
+			_characterID = id;
 			
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -93,12 +120,38 @@ package elements
 		
 		private function onAddedToStage():void
 		{
-			m_textures = Assets.getAtlas(Assets.DefaultAtlasName).getTextures(m_characters[int(_id)]);
-			m_image = new Image(m_textures[0]);
+//			m_textures = Assets.getAtlas(Assets.DefaultAtlasName).getTextures(m_characters[int(_characterID)]);
+//			m_textures = Assets.getAtlas(Assets.DefaultAtlasName).getTextures(characterID);
+//			m_image = new Image(m_textures[0]);
+			
+			m_image = new Image(Assets.getAtlas("CharactersAtlas").getTexture(characterID));
+			
+			// To Do # 계산된 값으로 사용 할 것.
+//			m_image.width = 200;
+//			m_image.height = 300;
+			
 			this.addChild(m_image);
+			
+//			bgImg.pivotX = m_image.x + m_image.width  / 2;
+//			this.pivotY = m_image.height / 2;
+			//			
+//			bgImg.scaleX = (matrixPos.x > matrixPos.y ? -1 : 1);
+			m_image.scaleX = m_image.scaleY = Main.STAGE_WIDTH / 3 / m_image.width * 0.75;
+//			this.scaleX *= (matrixPos.x > matrixPos.y ? -1 : 1);
+			
+			m_image.x = Main.STAGE_WIDTH / 3 * 0.25 / 2;
+			
+			if (matrixPos.x > matrixPos.y)
+			{
+				m_image.scaleX *= -1;
+				m_image.x += m_image.width;
+			}
+			
+			trace("bounds1: " + this.bounds.toString());
+			trace("bounds2: " + m_image.bounds.toString());
 		}
 		
-		// 표정을 바꾼다. (이미지 교체)
+		/** 표정을 바꾼다. (이미지 교체) */
 		public function act():void
 		{
 			if (faceId)

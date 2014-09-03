@@ -144,7 +144,7 @@ package managers
 			
 			m_menuLayer.addChild(button);
 			
-			trace(id + "button added.");
+//			trace(id + "button added.");
 			return button;
 		}
 		
@@ -155,7 +155,7 @@ package managers
 			button.removeEventListener(Event.ADDED_TO_STAGE, buttonAddedToStage);
 			
 			var yPadding:uint = 30;
-			var t:Number = (Math.PI * 2 / _numButtons) * m_menuLayer.numChildren - Math.PI/2; // 12시 방향 기준.
+			var t:Number = (Math.PI * 2 / _numButtons) * (m_menuLayer.numChildren - 1) - Math.PI/2; // 12o'clock orient  
 			var r:Number = Main.STAGE_HEIGHT * 0.3 / 2;
 			
 			var initX:Number = Main.STAGE_WIDTH / 2 - button.width / 2;

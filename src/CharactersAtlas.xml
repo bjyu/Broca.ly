@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas>
+    <SubTexture name="character0" x="0" y="0" width="110" height="140"/>
+    <SubTexture name="character1" x="100" y="0" width="110" height="140"/>
+    <SubTexture name="character2" x="200" y="0" width="110" height="140"/>
+    <SubTexture name="character3" x="300" y="0" width="110" height="140"/>
+    <SubTexture name="character4" x="400" y="0" width="110" height="140"/>
+    
+    <SubTexture name="character5" x="0" y="152" width="110" height="140"/>
+    <SubTexture name="character6" x="100" y="152" width="110" height="140"/>
+    <SubTexture name="character7" x="200" y="152" width="110" height="140"/>
+    <SubTexture name="character8" x="300" y="152" width="110" height="140"/>
+    <SubTexture name="character9" x="400" y="152" width="110" height="140"/>
+    
+    <SubTexture name="character10" x="0" y="290" width="110" height="140"/>
+    <SubTexture name="character11" x="100" y="290" width="110" height="140"/>
+    <SubTexture name="character12" x="200" y="290" width="110" height="140"/>
+    <SubTexture name="character13" x="300" y="290" width="110" height="140"/>
+    <SubTexture name="character14" x="400" y="290" width="110" height="140"/>
+    
+    <SubTexture name="character15" x="0" y="438" width="110" height="140"/>
+    <SubTexture name="character16" x="100" y="438" width="110" height="140"/>
+    <SubTexture name="character17" x="200" y="438" width="110" height="140"/>
+    <SubTexture name="character18" x="300" y="438" width="110" height="140"/>
+    <SubTexture name="character19" x="400" y="438" width="110" height="140"/>
+    
+    <SubTexture name="character20" x="0" y="594" width="110" height="140"/>
+    <SubTexture name="character21" x="100" y="594" width="110" height="140"/>
+    <SubTexture name="character22" x="200" y="594" width="110" height="140"/>
+    <SubTexture name="character23" x="300" y="594" width="110" height="140"/>
+    <SubTexture name="character24" x="400" y="594" width="110" height="140"/>
+</TextureAtlas>	

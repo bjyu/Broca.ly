@@ -12,6 +12,9 @@ package managers
 	
 	import events.SelectEvent;
 	
+	import feathers.themes.MetalWorksMobileTheme;
+	
+	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
@@ -37,9 +40,23 @@ package managers
 		private var m_actionButtonManager:ActionButtonManager;
 		private var m_previewManager:PreviewManager;
 		
-		public function SceneShifter()
+		private var m_startInfo:Object = { 
+			"info":[
+					{"characterID":"character0", "isoX":"1", "isoY":"0"},
+					{"characterID":"character1", "isoX":"2", "isoY":"0"},
+					{"characterID":"character2", "isoX":"0", "isoY":"1"},
+					{"characterID":"character6", "isoX":"2", "isoY":"1"},
+					{"characterID":"character7", "isoX":"0", "isoY":"2"},
+					{"characterID":"character11", "isoX":"1", "isoY":"2"},
+				   ]
+		};
+		
+		public function SceneShifter(startInfo:Object = null)
 		{
 			super();
+			
+			if (startInfo)
+				m_startInfo = startInfo;
 			
 			loadResources();
 		}
@@ -49,8 +66,21 @@ package managers
 			// loading image resources...
 //			new MetalWorksMobileTheme();
 			
-			Assets.getAtlas("ActionButtonAtlas", Assets.getTexture("ActionButtons"));
-			Assets.addEventListener("ActionButtonAtlasLoaded", initialize);
+			Assets.getAtlas("ActionButtonAtlas", Assets.getTexture("ActionButtons"), loadLayout);
+			
+			function loadLayout():void 
+			{
+				Assets.getAtlas("LayoutAtlas", Assets.getTexture("LayoutAtlas"), loadCharacters);
+			}
+			
+			function loadCharacters():void 
+			{
+				Assets.getAtlas("CharactersAtlas", Assets.getTexture("CharactersAtlas"), initialize);
+			}
+			
+			
+//			Assets.addEventListener("ActionButtonAtlasLoaded", initialize);
+			
 		}
 		
 		/**
@@ -73,8 +103,14 @@ package managers
 			addChild(m_menuLayer);
 			
 			// init managers
-			m_characterManager = new CharacterManager();
-			//			m_characterManager.addEventListener("imageLoaded", initInputBox);
+			m_characterManager = new CharacterManager(m_startInfo, function():void {
+					m_scene.addChild(m_characterManager.rootView);
+					m_characterManager.rootView.y = m_speechBox.y - m_characterManager.rootView.height;
+				} );
+//				function():void {m_scene.addChild(m_characterManager.rootView);});
+			
+			
+			
 			//			m_characterManager.addEventListener("imageLoaded", initInputBox2);
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
@@ -95,7 +131,7 @@ package managers
 			
 		
 			// To Do # remove this line (test code)
-			m_actionButtonManager.initialize("main");
+//			m_actionButtonManager.initialize("main");
 		}
 		
 		// event handlers
@@ -125,9 +161,9 @@ package managers
 					if (m_faceBox == null)
 					{
 						m_faceBox = new FaceBox();
-						m_faceBox.y = m_inputBox.softKeyboardRect.y;
+						m_faceBox.y = Starling.current.nativeStage.softKeyboardRect.y;
 						m_faceBox.width = stage.stageWidth;
-						m_faceBox.height = m_inputBox.softKeyboardRect.height;
+						m_faceBox.height = Starling.current.nativeStage.softKeyboardRect.height;
 						m_faceBox.addEventListener(SelectEvent.SELECTED, 
 							function(event:SelectEvent):void
 							{
@@ -141,6 +177,9 @@ package managers
 					}
 				}
 			);
+			
+			
+			
 		}
 		
 		
@@ -153,7 +192,15 @@ package managers
 		private function onData(event:Event):void
 		{
 			var d:Object = JSON.parse(event.data.toString());
-			actNext(d);
+			
+			// find model
+			
+			
+			// assign data to model props
+			
+			// speech data to speechBox
+			
+//			actNext(d);
 		}
 
 		

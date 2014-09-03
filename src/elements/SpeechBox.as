@@ -1,5 +1,6 @@
 package elements
 {
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -7,6 +8,7 @@ package elements
 	
 	public class SpeechBox extends Sprite
 	{
+		private var m_background:Image;
 		private var m_nameTextField:TextField;
 		private var m_wordsTextField:TextField;
 		
@@ -26,14 +28,19 @@ package elements
 		
 		protected function initialize():void
 		{
-			m_nameTextField = new TextField(100, 30, "");
-			m_nameTextField.border = true;
+			m_background = new Image(Assets.getAtlas("LayoutAtlas").getTexture("speechBox"));
+			this.addChild(m_background);
+			
+			m_nameTextField = new TextField(200, 40, "");
+			m_nameTextField.x = 75;
+//			m_nameTextField.border = true;
+			
 			this.addChild(m_nameTextField);
 			
 			m_wordsTextField = new TextField(stage.stageWidth * 0.9, 80, "");
 			m_wordsTextField.fontSize = 20;
 			m_wordsTextField.hAlign = HAlign.LEFT
-			m_wordsTextField.border = true;
+//			m_wordsTextField.border = true;
 			
 			m_wordsTextField.x = stage.stageWidth * 0.05;
 			m_wordsTextField.y = m_nameTextField.bounds.height;

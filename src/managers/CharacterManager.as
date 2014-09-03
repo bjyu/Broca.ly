@@ -1,5 +1,10 @@
 /**
  * 캐릭터 등장에 필요한 모든 것을 관리한다.
+ * 
+ * --> to-be
+ * 캐릭터 자원 불러오기.
+ * 캐릭터 위치 조정.
+ * 캐릭터 애니메이션?
  */
 package managers
 {
@@ -7,6 +12,7 @@ package managers
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import flash.system.ImageDecodingPolicy;
 	import flash.system.LoaderContext;
@@ -14,17 +20,25 @@ package managers
 	
 	import elements.Character;
 	
+	import feathers.layout.ViewPortBounds;
+	
+	import ly.broca.controller.RootController;
+	import ly.broca.model.CharacterModel;
+	import ly.broca.model.RootModel;
+	
 	import starling.animation.IAnimatable;
 	import starling.animation.Juggler;
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
 	
 	import utils.Animator;
 	import utils.CharacterStack;
+	import utils.Isomatric;
 
 	public class CharacterManager extends starling.events.EventDispatcher
 	{
@@ -34,18 +48,141 @@ package managers
 		// 캐릭터 배치를 위한 배열이다. 
 		private var m_stack:CharacterStack;
 		
+		private var m_posArr:Array;
+		
+		private var onComplete:Function;
+		
 		// 캐릭터 정보를 갖는다.
 		public var characters:Dictionary;
 		
+		public var sideUnit:Number = 200;
 		
-		public function CharacterManager()
+		public var rootView:Sprite;
+		
+		private var _numCharacters:uint = 0;
+		private var m_startInfo:Object;
+
+		public function get numCharacters():uint
 		{
-			m_stack = new CharacterStack();
-			characters = new Dictionary();
+			return _numCharacters;
+		}
+
+		public function set numCharacters(value:uint):void
+		{
+			if (value != _numCharacters)
+			{
+				_numCharacters = value;
+			}
+		}
+		
+		public function CharacterManager(startInfo:Object, onComplete:Function)
+		{
+			m_startInfo = startInfo;
+			this.onComplete = onComplete;
+			// To Do # init models
+//			m_stack = new CharacterStack();
+//			characters = new Dictionary();
 			
 			// init image resources
+			// after loading resources, call showUp function.
 			initializeImage();
 		}
+		
+		// To Do # lobby 구성시 필요, 다른 클래스로 이동할 것.
+		public function initLocationMatrix():void
+		{
+			// set array for player numbers
+			switch (numCharacters)
+			{
+				case 2:
+					m_posArr = 
+					[0,0,1],
+					[0,0,0],
+					[1,0,0];
+					break;
+				
+				case 3:
+					m_posArr =
+					[0,0,1],
+					[0,1,0],
+					[1,0,0];
+					break;
+				
+				case 4:
+					m_posArr = 
+					[0,0,1],
+					[0,0,1],
+					[1,1,0];
+					break;
+				
+				case 5:
+					m_posArr = 
+					[0,1,1],
+					[1,0,0],
+					[1,0,1];
+					
+				case 6:
+					m_posArr =
+					[0,1,1],
+					[1,0,1],
+					[1,1,0];
+					break;
+				
+				default:
+					break;
+			}
+		}
+		
+		
+		/** 
+		 * 캐릭터들을 등장시킨다.
+		 */
+		public function showUp():void
+		{
+			// To Do # 구현.
+			var gapH:Number = Main.STAGE_WIDTH - 200;
+			var gapV:Number = Main.STAGE_HEIGHT - 300;
+			var r:Number = Math.min(gapH, gapV);
+			
+			var centerX:Number = Main.STAGE_WIDTH / 2;
+			// To Do # Device별 정리 필요.
+			var centerY:Number = 688 / 2; 
+			
+			var i:uint = 0;
+			for (var c:Character in characters)
+			{
+//				var t:Number = (Math.PI * 2 / numCharacters) * i - Math.PI; // 9o'clock orient
+//				var newX:Number = centerX + (r * Math.cos(t));
+//				var newY:Number = centerY + (r * Math.sin(t));
+				i++;
+				
+//				trace(new Point(newX, newY).toString());
+			}
+			
+			
+			// get character from position array
+			/*
+			for (u in user)
+			{
+				
+			}
+			
+			*/
+			
+			// tile: 3x3, object 2x3
+//			Isomatric.convert2dToIsometric(
+			
+			
+			// 5 layers
+			
+			// 1) x1: w / 3 
+			// 2) x1: w / 3 / 2, x2: x1+ w/3 
+			// 3) x1: w / 3, x2: w / 3 * i, ..
+			// 4) x1: same with 2)
+			// 5) x1: same with 1)
+			
+		}
+		
 		
 		/**
 		 * 캐릭터를 새로 등록한다.
@@ -119,7 +256,7 @@ package managers
 				character.pivotY = character.height;
 				character.height = 0;
 				
-				switch (character.position)
+				switch (character.matrixPos.x > character.matrixPos.y)
 				{
 					case 0:
 						character.x = -character.width;
@@ -127,7 +264,7 @@ package managers
 						
 						break;
 					
-					case 3:
+					case 1:
 						
 						character.x = Main.STAGE_WIDTH;
 						tween.moveTo(Main.STAGE_WIDTH - character.width, character.y);
@@ -182,6 +319,29 @@ package managers
 			// http://cfile28.uf.tistory.com/original/2229124451EE947D06D061
 		}
 		
+		private function initializeMVC():void
+		{
+			var root:RootModel = new RootModel();
+			rootView = new Sprite();
+			
+			var infoArr:Array = m_startInfo.info;
+			for(var i:int = 0; i < infoArr.length ; i++)
+			{
+				var model:CharacterModel = new CharacterModel();
+				
+				model.characterID = infoArr[i].characterID;
+				model.faceID = model.characterID;
+				model.matrixPos = new Point(int(infoArr[i].isoX), int(infoArr[i].isoY));
+				
+				root.addChild(model);
+				numCharacters++;
+			}
+			
+			var rootController:RootController = new RootController(root, rootView);
+		}
+		
+		
+		
 		protected function onLoadComplete(event:flash.events.Event):void
 		{
 			_texture = Texture.fromBitmap(Bitmap(LoaderInfo(event.target).content));
@@ -192,9 +352,14 @@ package managers
 			m_loader = null;
 			
 			this.dispatchEvent(new starling.events.Event("imageLoaded"));
+			
+			Assets.addEventListener(Assets.DefaultAtlasName + "Loaded", function():void {
+
+	//			showUp();
+				initializeMVC();
+				onComplete();
+			});
 		}
 		
-		
-			
 	}
 }
