@@ -75,8 +75,6 @@ package elements
 			// show as begin
 			m_input.stage.focus = m_input;
 			m_input.requestSoftKeyboard();
-			
-			
 		}
 		
 		private function initialize():void

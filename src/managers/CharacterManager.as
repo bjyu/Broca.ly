@@ -353,16 +353,6 @@ package managers
 				}
 			);
 			
-			rootView.addEventListener(TouchEvent.TOUCH,
-				function(e:TouchEvent):void
-				{
-					if (e.getTouch(rootView, TouchPhase.ENDED))
-					{
-						self.dispatchEvent(new starling.events.Event("outsideTouched", false, rootView));
-						trace(getQualifiedClassName(e.currentTarget));
-					}
-				}
-			);
 		}
 		
 		protected function onLoadComplete(event:flash.events.Event):void

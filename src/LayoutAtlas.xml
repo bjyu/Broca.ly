@@ -4,4 +4,6 @@
     <SubTexture name="inputBox" x="3" y="160" width="658" height="52"/>
     <SubTexture name="faceButton" x="664" y="160" width="54" height="54"/>
     <SubTexture name="sendButton" x="720" y="160" width="96" height="52"/>
+    <SubTexture name="pageDefault" x="818" y="3" width="30" height="30"/>
+    <SubTexture name="pageCurrent" x="818" y="36" width="30" height="30"/>
 </TextureAtlas>	

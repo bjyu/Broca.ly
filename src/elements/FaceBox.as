@@ -16,6 +16,7 @@ package elements
 	import feathers.layout.TiledRowsLayout;
 	import feathers.themes.MetalWorksMobileTheme;
 	
+	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -28,7 +29,7 @@ package elements
 		private var m_actionTab:Sprite;
 		
 		private var m_pageIndicator:PageIndicator;
-		private var m_navigator:ScreenNavigator;
+//		private var m_navigator:ScreenNavigator;
 		private var m_list:List;
 		
 		public function FaceBox()
@@ -58,7 +59,7 @@ package elements
 			var collection:ListCollection = new ListCollection();
 			
 			var arrTexture:Vector.<Texture> = Assets.getAtlas(Assets.DefaultAtlasName).getTextures();
-			var arrName:Vertor.<String> = Assets.getAtlas(Assets.DefaultAtlasName).getNames();
+			var arrName:Vector.<String> = Assets.getAtlas(Assets.DefaultAtlasName).getNames();
 			var cnt:uint = arrName.length;
 			
 			for(var i:uint = 0; i < cnt ; i++)
@@ -74,26 +75,36 @@ package elements
 			listLayout.manageVisibility = true;
 			listLayout.gap = 8;
 			
-			this.m_list = new List();
-			this.m_list.dataProvider = collection;
-			this.m_list.layout = listLayout;
-			this.m_list.snapToPages = true;
-			this.m_list.scrollBarDisplayMode = List.SCROLL_BAR_DISPLAY_MODE_NONE;
-			this.m_list.horizontalScrollPolicy = List.SCROLL_POLICY_ON;
-			this.m_list.itemRendererFactory = tileListItemRendererFactory;
-			this.m_list.addEventListener(Event.SCROLL, onScroll);
+			m_list = new List();
+			m_list.dataProvider = collection;
+			m_list.layout = listLayout;
+			m_list.snapToPages = true;
+			m_list.scrollBarDisplayMode = List.SCROLL_BAR_DISPLAY_MODE_NONE;
+			m_list.horizontalScrollPolicy = List.SCROLL_POLICY_ON;
+			m_list.itemRendererFactory = tileListItemRendererFactory;
+			m_list.addEventListener(Event.SCROLL, onScroll);
 			this.addChild(this.m_list);
 			
 			m_pageIndicator = new PageIndicator();
 			
-			this.m_pageIndicator.direction = PageIndicator.DIRECTION_HORIZONTAL;
-			this.m_pageIndicator.pageCount = 1;
-			this.m_pageIndicator.gap = 3;
-			this.m_pageIndicator.paddingTop = this.m_pageIndicator.paddingRight = this.m_pageIndicator.paddingBottom =
-				this.m_pageIndicator.paddingLeft = 6;
+			m_pageIndicator.direction = PageIndicator.DIRECTION_HORIZONTAL;
+			m_pageIndicator.pageCount = 1;
+			m_pageIndicator.gap = 3;
+			m_pageIndicator.paddingTop = m_pageIndicator.paddingRight = m_pageIndicator.paddingBottom =
+				m_pageIndicator.paddingLeft = 6;
 			
-//			m_pageIndicator.horizontalAlign = PageIndicator.HORIZONTAL_ALIGN_CENTER;
-//			m_pageIndicator.verticalAlign = PageIndicator.VERTICAL_ALIGN_BOTTOM;
+			m_pageIndicator.horizontalAlign = PageIndicator.HORIZONTAL_ALIGN_CENTER;
+			m_pageIndicator.verticalAlign = PageIndicator.VERTICAL_ALIGN_MIDDLE;
+			
+			m_pageIndicator.normalSymbolFactory = function():DisplayObject
+			{
+				return new Image(Assets.getAtlas("LayoutAtlas").getTexture("pageDefault"));
+			};
+			
+			m_pageIndicator.selectedSymbolFactory = function():DisplayObject
+			{
+				return new Image(Assets.getAtlas("LayoutAtlas").getTexture("pageCurrent"));
+			};
 			
 			m_pageIndicator.addEventListener(Event.CHANGE, onChange);
 			
@@ -104,25 +115,27 @@ package elements
 		
 		protected function layout():void
 		{
-			this.m_pageIndicator.width = this.stage.stageWidth;
-			this.m_pageIndicator.validate();
-			this.m_pageIndicator.y = this.stage.stageHeight - this.m_pageIndicator.height;
-			
 			const shorterSide:Number = Math.min(this.stage.stageWidth, this.stage.stageHeight);
 			const layout:TiledRowsLayout = TiledRowsLayout(this.m_list.layout);
-			layout.paddingTop = layout.paddingRight = layout.paddingBottom =
-				layout.paddingLeft = shorterSide * 0.06;
+//			layout.paddingTop = layout.paddingBottom = 10;
+			layout.paddingRight = layout.paddingLeft = shorterSide * 0.06;
 			layout.gap = shorterSide * 0.04;
 			
-			this.m_list.itemRendererProperties.gap = shorterSide * 0.01;
+			m_list.itemRendererProperties.gap = shorterSide * 0.01;
 			
-			this.m_list.width = this.stage.stageWidth;
-			this.m_list.height = 400; //this.m_pageIndicator.y;
-			this.m_list.validate();
+			m_list.width = this.stage.stageWidth;
+			m_list.height = 380; //this.m_pageIndicator.y;
+			m_list.validate();
 			
 			m_list.addEventListener(Event.TRIGGERED, onTriggered);
 			
-			this.m_pageIndicator.pageCount = this.m_list.horizontalPageCount;
+			m_pageIndicator.width = this.stage.stageWidth;
+			m_pageIndicator.validate();
+			m_pageIndicator.y = m_list.height;
+			
+			m_pageIndicator.pageCount = m_list.horizontalPageCount;
+			
+			trace("indicator bounds: " + m_pageIndicator.bounds);
 		}
 		
 		protected function tileListItemRendererFactory():IListItemRenderer

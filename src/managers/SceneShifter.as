@@ -127,37 +127,23 @@ package managers
 					m_scene.addChild(m_characterManager.rootView);
 					m_characterManager.rootView.y = m_speechBox.y - m_characterManager.rootView.height;
 					
-//					for (var i:int = 0 ; i < m_characterManager.rootView.numChildren ; i++)
-//					{
-//						var obj:DisplayObject = m_characterManager.rootView.getChildAt(i);
-//						obj.addEventListener(TouchEvent.TOUCH, 
-//							function(e:TouchEvent):void
-//							{
-//								trace(i.toString());
-//								trace("child evt1: " + getQualifiedClassName(e.target));
-//								trace("child evt2: " + getQualifiedClassName(e.currentTarget));
-////								if (m_actionButtonManager && e.currentTarget === obj) {
-////									trace("child evt: " + getQualifiedClassName(e.currentTarget));
-////									m_actionButtonManager.initialize("main");
-////								}
-//							}
-//						);
-//					}
+					// To Do # 실행 시점이 명확하지 않으니 리팩토링할 것.
+					// faceBox
+					m_faceBox = new FaceBox();
+					m_faceBox.y = m_inputBox.bounds.bottom;
+					m_faceBox.width = stage.stageWidth;
+					m_faceBox.height = Starling.current.nativeStage.softKeyboardRect.height;
+					m_faceBox.addEventListener(SelectEvent.SELECTED, 
+						function(event:SelectEvent):void
+						{
+							m_inputBox.faceId = event.data.toString();
+							
+							// preview
+							m_previewManager.preview.showCharacter(m_inputBox.faceId);
+						}
+					);
+					addChild(m_faceBox);
 					
-//					m_characterManager.rootView.addEventListener(TouchEvent.TOUCH,
-//						function(e:TouchEvent):void
-//						{
-//							trace("parent evt1: " + getQualifiedClassName(e.target));
-//							trace("parent evt2: " + getQualifiedClassName(e.currentTarget));
-//							
-//							trace(Sprite(e.currentTarget).name);
-//							
-////							if (e.target === m_characterManager.rootView) {
-////								trace("parent evt: " + getQualifiedClassName(e.target));
-////								m_actionButtonManager.hide();
-////							}
-//						}
-//					);
 				} 
 			);
 			
@@ -220,29 +206,11 @@ package managers
 			
 			m_inputBox.addEventListener("keyboardActivated", function(event:Event):void
 				{
-					// 4. faceBox
-					if (m_faceBox == null)
-					{
-						m_faceBox = new FaceBox();
+					// To Do # 초기화시에 조정 필요.
+					if (m_faceBox)
 						m_faceBox.y = Starling.current.nativeStage.softKeyboardRect.y;
-						m_faceBox.width = stage.stageWidth;
-						m_faceBox.height = Starling.current.nativeStage.softKeyboardRect.height;
-						m_faceBox.addEventListener(SelectEvent.SELECTED, 
-							function(event:SelectEvent):void
-							{
-								m_inputBox.faceId = event.data.toString();
-								
-								// preview
-								m_previewManager.preview.showCharacter(m_inputBox.faceId);
-							}
-						);
-						addChild(m_faceBox);
-					}
 				}
 			);
-			
-			
-			
 		}
 		
 		
