@@ -7,7 +7,7 @@ package events
 	
 	public class CharacterEvent extends Event
 	{
-		public static const ACTING:String = "acting";
+//		public static const ACTING:String = "acting";
 		
 		public function CharacterEvent(type:String, bubbles:Boolean=false, data:Object=null)
 		{

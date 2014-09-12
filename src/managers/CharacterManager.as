@@ -17,6 +17,7 @@ package managers
 	import flash.system.ImageDecodingPolicy;
 	import flash.system.LoaderContext;
 	import flash.utils.Dictionary;
+	import flash.utils.getQualifiedClassName;
 	
 	import elements.Character;
 	
@@ -34,6 +35,9 @@ package managers
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	
 	import utils.Animator;
@@ -337,10 +341,29 @@ package managers
 				numCharacters++;
 			}
 			
+			trace("numCharacters: " + numCharacters);
+			
 			var rootController:RootController = new RootController(root, rootView);
+			var self:EventDispatcher = this;
+			rootController.addEventListener("characterTouched", 
+				function(e:starling.events.Event):void
+				{
+					// bubble manually.
+					self.dispatchEvent(e);
+				}
+			);
+			
+			rootView.addEventListener(TouchEvent.TOUCH,
+				function(e:TouchEvent):void
+				{
+					if (e.getTouch(rootView, TouchPhase.ENDED))
+					{
+						self.dispatchEvent(new starling.events.Event("outsideTouched", false, rootView));
+						trace(getQualifiedClassName(e.currentTarget));
+					}
+				}
+			);
 		}
-		
-		
 		
 		protected function onLoadComplete(event:flash.events.Event):void
 		{

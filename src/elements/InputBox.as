@@ -239,7 +239,7 @@ package elements
 			
 //			trace(Starling.current.nativeStage.softKeyboardRect.toString());
 			this.dispatchEvent(new Event("keyboardActivated"));
-			trace("onKeyboardActvate");
+			trace("onKeyboardActivate");
 		}
 
 	}

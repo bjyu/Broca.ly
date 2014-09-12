@@ -5,10 +5,12 @@ package elements
 {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.getQualifiedClassName;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.TouchEvent;
 	import starling.textures.Texture;
 	
 	public class Character extends Sprite
@@ -69,6 +71,7 @@ package elements
 			if (value != _faceID)	
 			{
 				_faceID = value;
+				this.name = value;
 //				act();
 			}
 		}
@@ -149,6 +152,19 @@ package elements
 			
 			trace("bounds1: " + this.bounds.toString());
 			trace("bounds2: " + m_image.bounds.toString());
+			
+//			is fired events 6 times. idk why..
+//			var self:* = this;
+//			m_image.addEventListener(TouchEvent.TOUCH, 
+//				function(e:TouchEvent):void
+//				{
+//					e.stopPropagation();
+//					trace("type: " + getQualifiedClassName(e.currentTarget));
+//					trace(faceId + " is touched.");
+//					
+//					trace(faceId + " numChildren: " + self.numChildren.toString());
+//				}
+//			);
 		}
 		
 		/** 표정을 바꾼다. (이미지 교체) */

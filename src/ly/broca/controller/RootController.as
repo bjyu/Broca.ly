@@ -4,8 +4,12 @@ package ly.broca.controller
 	import ly.broca.model.RootModel;
 	
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.events.EventDispatcher;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 
-	public class RootController
+	public class RootController extends EventDispatcher
 	{
 		private var _children:Array = new Array();
 		
@@ -18,13 +22,30 @@ package ly.broca.controller
 				var c:CharacterController = new CharacterController(m);
 				view.addChild(c.view);
 				
+				trace("child numChildren:" + c.view.numChildren);
 				this.addController(c);
 			}
+			
+			trace("root numChildren: " + view.numChildren);
 		}
 		
-		public function addController(child:Object):void
+		public function addController(child:CharacterController):void
 		{
 			_children.push(child);
+			var self:EventDispatcher = this;
+			
+			child.view.addEventListener(TouchEvent.TOUCH, 
+				function(e:TouchEvent):void
+				{
+					if (e.getTouch(child.view, TouchPhase.ENDED))
+					{
+						self.dispatchEvent(new Event("characterTouched", false, child.view));
+						
+						/** Important: stop bubbles.*/
+						e.stopImmediatePropagation();
+					}
+				}
+			);
 //			dispatchEvent(new Event("modelAdded"));
 		}
 		

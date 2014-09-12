@@ -31,6 +31,7 @@ package managers
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 
 	public class ActionButtonManager extends EventDispatcher
 	{
@@ -120,7 +121,7 @@ package managers
 			*/
 			
 			m_menuLayer.removeChildren(0, -1, true);
-//			m_menuLayer.visible = true;
+			m_menuLayer.visible = true;
 			
 //			createBasicButtons();
 			createButtons(catId);
@@ -202,6 +203,9 @@ package managers
 			var button:ActionButton = ActionButton(event.currentTarget);
 //					m_menuLayer.visible = false;
 			
+			if (!event.getTouch(button, TouchPhase.ENDED))
+				return;
+			
 			if (button.subCatId)
 			{
 				m_levels.push(button.subCatId);
@@ -209,17 +213,20 @@ package managers
 			}
 			else if(button.name == "btn10")
 			{
+				m_levels.pop();
 				var catId:String = "main";
 				if (m_levels.length > 0)
 					catId = m_levels[m_levels.length-1].toString()
-						
+				
 				initialize(catId);
-				m_levels.pop();
 			}
 			else
 			{
 				this.dispatchEvent(new SelectEvent(button.name));
 			}
+			
+			/** Important: stop bubbles. */
+			event.stopImmediatePropagation();
 		}
 		
 		/** 
@@ -258,5 +265,10 @@ package managers
 			);
 		}
 		
+		
+		public function hide():void
+		{
+			m_menuLayer.visible = false;
+		}
 	}
 }

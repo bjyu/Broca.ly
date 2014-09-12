@@ -4,6 +4,8 @@
 
 package managers
 {
+	import flash.utils.getQualifiedClassName;
+	
 	import elements.Character;
 	import elements.FaceBox;
 	import elements.InputBox;
@@ -15,9 +17,13 @@ package managers
 	import feathers.themes.MetalWorksMobileTheme;
 	
 	import starling.core.Starling;
+	import starling.display.DisplayObject;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.Touch;
 	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	
 	public class SceneShifter extends Sprite
 	{
@@ -92,6 +98,19 @@ package managers
 			//  scene
 			m_scene = new Scene();
 			m_scene.addEventListener(Event.ADDED_TO_STAGE, onSceneAddedToStage);
+			m_scene.addEventListener(TouchEvent.TOUCH, 
+				function(e:TouchEvent):void
+				{
+					if (e.getTouch(m_scene, TouchPhase.ENDED))
+					{
+						if (m_actionButtonManager)
+							m_actionButtonManager.hide();
+
+						trace("parent evt1: " + getQualifiedClassName(e.target));
+//						trace("parent evt2: " + getQualifiedClassName(e.currentTarget));
+					}
+				}
+			);
 			
 			addChild(m_scene);
 			
@@ -103,10 +122,45 @@ package managers
 			addChild(m_menuLayer);
 			
 			// init managers
-			m_characterManager = new CharacterManager(m_startInfo, function():void {
+			m_characterManager = new CharacterManager(m_startInfo, 
+				function():void {
 					m_scene.addChild(m_characterManager.rootView);
 					m_characterManager.rootView.y = m_speechBox.y - m_characterManager.rootView.height;
-				} );
+					
+//					for (var i:int = 0 ; i < m_characterManager.rootView.numChildren ; i++)
+//					{
+//						var obj:DisplayObject = m_characterManager.rootView.getChildAt(i);
+//						obj.addEventListener(TouchEvent.TOUCH, 
+//							function(e:TouchEvent):void
+//							{
+//								trace(i.toString());
+//								trace("child evt1: " + getQualifiedClassName(e.target));
+//								trace("child evt2: " + getQualifiedClassName(e.currentTarget));
+////								if (m_actionButtonManager && e.currentTarget === obj) {
+////									trace("child evt: " + getQualifiedClassName(e.currentTarget));
+////									m_actionButtonManager.initialize("main");
+////								}
+//							}
+//						);
+//					}
+					
+//					m_characterManager.rootView.addEventListener(TouchEvent.TOUCH,
+//						function(e:TouchEvent):void
+//						{
+//							trace("parent evt1: " + getQualifiedClassName(e.target));
+//							trace("parent evt2: " + getQualifiedClassName(e.currentTarget));
+//							
+//							trace(Sprite(e.currentTarget).name);
+//							
+////							if (e.target === m_characterManager.rootView) {
+////								trace("parent evt: " + getQualifiedClassName(e.target));
+////								m_actionButtonManager.hide();
+////							}
+//						}
+//					);
+				} 
+			);
+			
 //				function():void {m_scene.addChild(m_characterManager.rootView);});
 			
 			
@@ -126,6 +180,15 @@ package managers
 //					m_previewManager.preview.showEffect(event.data.toString());
 				}
 			);
+			
+			m_characterManager.addEventListener("characterTouched",
+				function(e:Event):void
+				{
+					trace("faceID: " + e.data.faceId);
+					m_actionButtonManager.initialize();
+				}
+			);
+				
 			
 			m_previewManager = new PreviewManager(m_previewLayer);
 			
