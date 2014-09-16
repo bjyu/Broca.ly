@@ -121,7 +121,7 @@ package managers
 			*/
 			
 			m_menuLayer.removeChildren(0, -1, true);
-			m_menuLayer.visible = true;
+//			m_menuLayer.visible = true;
 			
 //			createBasicButtons();
 			createButtons(catId);
@@ -226,7 +226,7 @@ package managers
 			}
 			
 			/** Important: stop bubbles. */
-			event.stopImmediatePropagation();
+			event.stopPropagation();
 		}
 		
 		/** 
@@ -268,7 +268,8 @@ package managers
 		
 		public function hide():void
 		{
-			m_menuLayer.visible = false;
+			m_menuLayer.removeChildren(0, -1, true);
+//			m_menuLayer.visible = false;
 		}
 	}
 }

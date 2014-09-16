@@ -4,6 +4,7 @@
 
 package managers
 {
+	import flash.geom.Point;
 	import flash.utils.getQualifiedClassName;
 	
 	import elements.Character;
@@ -17,11 +18,8 @@ package managers
 	import feathers.themes.MetalWorksMobileTheme;
 	
 	import starling.core.Starling;
-	import starling.display.DisplayObject;
-	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	
@@ -33,7 +31,10 @@ package managers
 		private var m_scene:Scene; 
 		
 		// action menu layer
-		private var m_menuLayer:Sprite;
+		private var m_actionMenuLayer:Sprite;
+		
+		// cancel menu layer
+		private var m_cancelMenuLayer:Sprite;
 		
 		// preview layer
 		private var m_previewLayer:Sprite;
@@ -44,6 +45,7 @@ package managers
 		
 		private var m_characterManager:CharacterManager;
 		private var m_actionButtonManager:ActionButtonManager;
+		private var m_cancelButtonManager:CancelButtonManager;
 		private var m_previewManager:PreviewManager;
 		
 		private var m_startInfo:Object = { 
@@ -56,6 +58,7 @@ package managers
 					{"characterID":"character11", "isoX":"1", "isoY":"2"},
 				   ]
 		};
+		
 		
 		public function SceneShifter(startInfo:Object = null)
 		{
@@ -118,34 +121,16 @@ package managers
 			m_previewLayer = new Sprite();
 			addChild(m_previewLayer);
 			
-			m_menuLayer = new Sprite();
-			addChild(m_menuLayer);
+			m_actionMenuLayer = new Sprite();
+			addChild(m_actionMenuLayer);
+			
+			m_cancelMenuLayer = new Sprite();
+			addChild(m_cancelMenuLayer);
 			
 			// init managers
-			m_characterManager = new CharacterManager(m_startInfo, 
-				function():void {
-					m_scene.addChild(m_characterManager.rootView);
-					m_characterManager.rootView.y = m_speechBox.y - m_characterManager.rootView.height;
-					
-					// To Do # 실행 시점이 명확하지 않으니 리팩토링할 것.
-					// faceBox
-					m_faceBox = new FaceBox();
-					m_faceBox.y = m_inputBox.bounds.bottom;
-					m_faceBox.width = stage.stageWidth;
-					m_faceBox.height = Starling.current.nativeStage.softKeyboardRect.height;
-					m_faceBox.addEventListener(SelectEvent.SELECTED, 
-						function(event:SelectEvent):void
-						{
-							m_inputBox.faceId = event.data.toString();
-							
-							// preview
-							m_previewManager.preview.showCharacter(m_inputBox.faceId);
-						}
-					);
-					addChild(m_faceBox);
-					
-				} 
-			);
+			m_characterManager = new CharacterManager(m_startInfo);
+			m_scene.addChild(m_characterManager.rootView);
+			m_characterManager.rootView.y = m_speechBox.y - m_characterManager.rootView.height;
 			
 //				function():void {m_scene.addChild(m_characterManager.rootView);});
 			
@@ -155,7 +140,7 @@ package managers
 			Main.comm.addEventListener("connect", onConnect);
 			Main.comm.addEventListener("data", onData);
 			
-			m_actionButtonManager = new ActionButtonManager(m_menuLayer);
+			m_actionButtonManager = new ActionButtonManager(m_actionMenuLayer);
 			m_actionButtonManager.addEventListener(SelectEvent.SELECTED, 
 				function(event:SelectEvent):void
 				{
@@ -167,6 +152,9 @@ package managers
 				}
 			);
 			
+			m_cancelButtonManager = new CancelButtonManager(m_cancelMenuLayer);
+			
+			
 			m_characterManager.addEventListener("characterTouched",
 				function(e:Event):void
 				{
@@ -174,7 +162,30 @@ package managers
 					m_actionButtonManager.initialize();
 				}
 			);
-				
+			
+			m_characterManager.addEventListener("buttonHold",
+				function(e:Event):void
+				{
+					trace("holded point: " + Point(e.data).toString());
+					m_cancelButtonManager.start(Point(e.data));
+				}
+			);
+			
+			m_characterManager.addEventListener("touchMoved",
+				function(e:Event):void
+				{
+					m_cancelButtonManager.onTouchMoved(e);
+				}
+			);
+			
+			m_characterManager.addEventListener("touchEnded",
+				function(e:Event):void
+				{
+					m_cancelButtonManager.onTouchEnded(e);
+				}
+			);
+			
+			
 			
 			m_previewManager = new PreviewManager(m_previewLayer);
 			
@@ -211,6 +222,22 @@ package managers
 						m_faceBox.y = Starling.current.nativeStage.softKeyboardRect.y;
 				}
 			);
+			
+			// 4. faceBox
+			m_faceBox = new FaceBox();
+			m_faceBox.y = m_inputBox.bounds.bottom;
+			m_faceBox.width = stage.stageWidth;
+			m_faceBox.height = Starling.current.nativeStage.softKeyboardRect.height;
+			m_faceBox.addEventListener(SelectEvent.SELECTED, 
+				function(event:SelectEvent):void
+				{
+					m_inputBox.faceId = event.data.toString();
+					
+					// preview
+					m_previewManager.preview.showCharacter(m_inputBox.faceId);
+				}
+			);
+			addChild(m_faceBox);
 		}
 		
 		

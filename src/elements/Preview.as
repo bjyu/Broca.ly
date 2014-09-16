@@ -4,8 +4,7 @@
  */
 package elements
 {
-	import feathers.controls.Button;
-	
+	import starling.display.Button;
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -30,8 +29,7 @@ package elements
 //			image.height = Main.STAGE_HEIGHT * 0.5 * 0.75;
 //			addChild(image);
 			
-			m_closeButton = new Button();
-			m_closeButton.label = "X";
+			m_closeButton = new Button(Assets.getAtlas("LayoutAtlas").getTexture("closeButton"));
 			m_closeButton.addEventListener(Event.TRIGGERED, onCloseButtonTriggered);
 			
 			
@@ -47,9 +45,7 @@ package elements
 		
 		public function showCharacter(faceId:String):void
 		{
-			// To Do #
-			// 이미 로딩된 Character 클래스를 활용하는 것이 효과 적일 것. 
-			var character:Image = new Image(Assets.getAtlas(Assets.DefaultAtlasName).getTexture(faceId));
+			var character:Image = new Image(Assets.getAtlas("CharactersAtlas").getTexture(faceId));
 			
 			if (!m_character)
 			{
@@ -123,7 +119,7 @@ package elements
 			this.x = (Main.STAGE_WIDTH - displayObject.width) / 2;
 			this.y = (this.height - displayObject.height) / 2;
 			
-			m_closeButton.x = this.bounds.right - m_closeButton.width;
+			m_closeButton.x = displayObject.bounds.right;
 		}
 		
 	}

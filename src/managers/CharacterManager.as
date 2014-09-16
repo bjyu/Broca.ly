@@ -21,8 +21,6 @@ package managers
 	
 	import elements.Character;
 	
-	import feathers.layout.ViewPortBounds;
-	
 	import ly.broca.controller.RootController;
 	import ly.broca.model.CharacterModel;
 	import ly.broca.model.RootModel;
@@ -35,14 +33,10 @@ package managers
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
-	import starling.events.Touch;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	
 	import utils.Animator;
 	import utils.CharacterStack;
-	import utils.Isomatric;
 
 	public class CharacterManager extends starling.events.EventDispatcher
 	{
@@ -79,17 +73,20 @@ package managers
 			}
 		}
 		
-		public function CharacterManager(startInfo:Object, onComplete:Function)
+		public function CharacterManager(startInfo:Object)
 		{
 			m_startInfo = startInfo;
-			this.onComplete = onComplete;
+//			this.onComplete = onComplete;
 			// To Do # init models
 //			m_stack = new CharacterStack();
 //			characters = new Dictionary();
 			
 			// init image resources
 			// after loading resources, call showUp function.
-			initializeImage();
+//			initializeImage();
+			
+			initializeMVC();
+//			onComplete();
 		}
 		
 		// To Do # lobby 구성시 필요, 다른 클래스로 이동할 것.
@@ -346,6 +343,30 @@ package managers
 			var rootController:RootController = new RootController(root, rootView);
 			var self:EventDispatcher = this;
 			rootController.addEventListener("characterTouched", 
+				function(e:starling.events.Event):void
+				{
+					// bubble manually.
+					self.dispatchEvent(e);
+				}
+			);
+			
+			rootController.addEventListener("buttonHold",
+				function(e:starling.events.Event):void
+				{
+					// bubble manually.
+					self.dispatchEvent(e);
+				}
+			);
+			
+			rootController.addEventListener("touchMoved",
+				function(e:starling.events.Event):void
+				{
+					// bubble manually.
+					self.dispatchEvent(e);
+				}
+			);
+			
+			rootController.addEventListener("touchEnded",
 				function(e:starling.events.Event):void
 				{
 					// bubble manually.

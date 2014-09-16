@@ -4,14 +4,9 @@
 */
 package elements
 {
-	import flash.display.BitmapData;
-	import flash.display.Graphics;
-	import flash.display.Sprite;
 	import flash.utils.Dictionary;
 	
-	import starling.display.Image;
 	import starling.display.Sprite;
-	import starling.textures.Texture;
 	
 	public class ActionButtons
 	{
